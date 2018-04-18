@@ -5,10 +5,6 @@
  */
 package tu.film;
 
-/**
- *
- * @author Adriana Arango
- */
 public class TuFilm {
 
     public static void main(String[] args) {
