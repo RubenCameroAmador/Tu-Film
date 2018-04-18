@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 package tu.film;
-
+//hello este fue un ejemplo de github
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
