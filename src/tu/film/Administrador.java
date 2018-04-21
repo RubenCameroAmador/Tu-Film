@@ -18,7 +18,7 @@ import javax.swing.table.DefaultTableModel;
 
 /**
  *
- * @author Adriana Arango
+ * @author Adriana Arango y Ruben Camero
  */
 public class Administrador extends javax.swing.JFrame {
    ImageIcon imagen;
