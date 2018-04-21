@@ -9,8 +9,9 @@ public class TuFilm {
 
     public static void main(String[] args) {
         // TODO code application logic here
-        Administrador a= new Administrador();
+       Entrada a= new Entrada();
         a.setVisible(true);
+        a.setBounds(500, 300,900, 425);
     }
     
 }

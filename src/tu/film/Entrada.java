@@ -9,7 +9,7 @@ import javax.swing.JOptionPane;
 
 /**
  *
- * @author Adriana Arango
+ * @author Adriana Arango y Ruben Camero
  */
 public class Entrada extends javax.swing.JFrame {
 
@@ -36,11 +36,12 @@ public class Entrada extends javax.swing.JFrame {
         nombreUsuario = new javax.swing.JTextField();
         password = new javax.swing.JPasswordField();
         login = new javax.swing.JButton();
-        jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
         jMenuItem2 = new javax.swing.JMenuItem();
+        jLabel3 = new javax.swing.JLabel();
+        administrador = new javax.swing.JMenuBar();
         jMenu2 = new javax.swing.JMenu();
+        usuario = new javax.swing.JMenuItem();
+        admin = new javax.swing.JMenuItem();
 
         jLabel1.setText("Nombre de usuario:");
 
@@ -105,55 +106,47 @@ public class Entrada extends javax.swing.JFrame {
             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
+        jMenuItem2.setText("jMenuItem2");
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jMenu1.setText("File");
+        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/tu/film/imagenes/tu_film_.jpg"))); // NOI18N
 
-        jMenuItem1.setText("Administrador");
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+        jMenu2.setText("Seleccionar");
+
+        usuario.setText("Usuario");
+        usuario.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem1ActionPerformed(evt);
+                usuarioActionPerformed(evt);
             }
         });
-        jMenu1.add(jMenuItem1);
+        jMenu2.add(usuario);
 
-        jMenuItem2.setText("Usuario");
-        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+        admin.setText("Administrador");
+        admin.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem2ActionPerformed(evt);
+                adminActionPerformed(evt);
             }
         });
-        jMenu1.add(jMenuItem2);
+        jMenu2.add(admin);
 
-        jMenuBar1.add(jMenu1);
+        administrador.add(jMenu2);
 
-        jMenu2.setText("Edit");
-        jMenuBar1.add(jMenu2);
-
-        setJMenuBar(jMenuBar1);
+        setJMenuBar(administrador);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 682, Short.MAX_VALUE)
+            .addComponent(jLabel3)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 438, Short.MAX_VALUE)
+            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 345, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-        // TODO add your handling code here:
-        administradorLogin.setVisible(true);
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
-
-    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     private void loginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginActionPerformed
         // TODO add your handling code here:
@@ -176,6 +169,22 @@ public class Entrada extends javax.swing.JFrame {
         
         
     }//GEN-LAST:event_loginMouseClicked
+
+    private void usuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_usuarioActionPerformed
+        // TODO add your handling code here:
+        Usuario s= new Usuario();
+        s.setVisible(true);
+        s.setLocationRelativeTo(null);
+        s.setBounds(560, 300, 500, 500);
+    }//GEN-LAST:event_usuarioActionPerformed
+
+    private void adminActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_adminActionPerformed
+        // TODO add your handling code here:
+        Administrador a=  new Administrador();
+        a.setVisible(true);
+        a.setLocationRelativeTo(null);
+        a.setBounds(570, 300, 595, 555);
+    }//GEN-LAST:event_adminActionPerformed
 
     /**
      * @param args the command line arguments
@@ -213,17 +222,18 @@ public class Entrada extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem admin;
+    private javax.swing.JMenuBar administrador;
     private javax.swing.JFrame administradorLogin;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JMenu jMenu1;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JMenu jMenu2;
-    private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JButton login;
     private javax.swing.JTextField nombreUsuario;
     private javax.swing.JPasswordField password;
+    private javax.swing.JMenuItem usuario;
     // End of variables declaration//GEN-END:variables
 }
