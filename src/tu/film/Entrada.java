@@ -219,6 +219,7 @@ public class Entrada extends javax.swing.JFrame {
         s.setVisible(true);
         s.setLocationRelativeTo(null);
         s.setBounds(560, 300, 500, 500);
+       this.setVisible(false);
     }//GEN-LAST:event_usuarioActionPerformed
 
     private void adminActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_adminActionPerformed
