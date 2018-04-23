@@ -39,6 +39,9 @@ public class Entrada extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         jMenuItem2 = new javax.swing.JMenuItem();
+        ingresoUsuario = new javax.swing.JFrame();
+        jPanel2 = new javax.swing.JPanel();
+        jSeparator1 = new javax.swing.JSeparator();
         jLabel3 = new javax.swing.JLabel();
         administrador = new javax.swing.JMenuBar();
         jMenu2 = new javax.swing.JMenu();
@@ -148,6 +151,28 @@ public class Entrada extends javax.swing.JFrame {
 
         jMenuItem2.setText("jMenuItem2");
 
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 698, Short.MAX_VALUE)
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 434, Short.MAX_VALUE)
+        );
+
+        javax.swing.GroupLayout ingresoUsuarioLayout = new javax.swing.GroupLayout(ingresoUsuario.getContentPane());
+        ingresoUsuario.getContentPane().setLayout(ingresoUsuarioLayout);
+        ingresoUsuarioLayout.setHorizontalGroup(
+            ingresoUsuarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        ingresoUsuarioLayout.setVerticalGroup(
+            ingresoUsuarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/tu/film/imagenes/tu_film_.jpg"))); // NOI18N
@@ -218,7 +243,7 @@ public class Entrada extends javax.swing.JFrame {
         Usuario s= new Usuario();
         s.setVisible(true);
         s.setLocationRelativeTo(null);
-        s.setBounds(560, 300, 500, 500);
+        s.setBounds(560, 300, 460, 480);
        this.setVisible(false);
     }//GEN-LAST:event_usuarioActionPerformed
 
@@ -279,6 +304,7 @@ public class Entrada extends javax.swing.JFrame {
     private javax.swing.JMenuItem admin;
     private javax.swing.JMenuBar administrador;
     private javax.swing.JFrame administradorLogin;
+    private javax.swing.JFrame ingresoUsuario;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -287,6 +313,8 @@ public class Entrada extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JSeparator jSeparator1;
     private javax.swing.JButton login;
     private javax.swing.JTextField nombreUsuario;
     private javax.swing.JPasswordField password;
