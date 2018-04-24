@@ -5,6 +5,13 @@
  */
 package tu.film;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author Adriana Arango
@@ -29,15 +36,16 @@ public class Usuario extends javax.swing.JFrame {
 
         Registrarse = new javax.swing.JFrame();
         jPanel2 = new javax.swing.JPanel();
-        jTextField1 = new javax.swing.JTextField();
+        nombre = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jPasswordField1 = new javax.swing.JPasswordField();
-        jPasswordField2 = new javax.swing.JPasswordField();
+        contraseña = new javax.swing.JPasswordField();
+        validacion = new javax.swing.JPasswordField();
         jLabel4 = new javax.swing.JLabel();
         jButton4 = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
+        codigo = new javax.swing.JTextField();
+        ingresarButton = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
@@ -67,6 +75,13 @@ public class Usuario extends javax.swing.JFrame {
 
         jLabel5.setText("Digite codigo de tarjeta Tu-Film:");
 
+        ingresarButton.setText("Ingresar");
+        ingresarButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ingresarButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -83,13 +98,17 @@ public class Usuario extends javax.swing.JFrame {
                             .addComponent(jLabel2))
                         .addGap(60, 60, 60)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextField2)
-                            .addComponent(jPasswordField2)
-                            .addComponent(jPasswordField1)
+                            .addComponent(codigo)
+                            .addComponent(validacion)
+                            .addComponent(contraseña)
                             .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(nombre, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(0, 0, Short.MAX_VALUE)))))
                 .addGap(42, 42, 42))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(ingresarButton)
+                .addGap(186, 186, 186))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -99,20 +118,22 @@ public class Usuario extends javax.swing.JFrame {
                 .addGap(23, 23, 23)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(nombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(jPasswordField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(contraseña, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(jPasswordField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(validacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(60, Short.MAX_VALUE))
+                    .addComponent(codigo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
+                .addComponent(ingresarButton)
+                .addGap(26, 26, 26))
         );
 
         javax.swing.GroupLayout RegistrarseLayout = new javax.swing.GroupLayout(Registrarse.getContentPane());
@@ -127,7 +148,7 @@ public class Usuario extends javax.swing.JFrame {
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        getContentPane().setLayout(new java.awt.GridLayout());
+        getContentPane().setLayout(new java.awt.GridLayout(1, 0));
 
         jPanel1.setBorder(javax.swing.BorderFactory.createMatteBorder(5, 5, 5, 5, new java.awt.Color(0, 0, 0)));
         jPanel1.setForeground(new java.awt.Color(204, 0, 51));
@@ -237,7 +258,7 @@ public class Usuario extends javax.swing.JFrame {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
         Registrarse.setVisible(true);
-        Registrarse.setBounds(500, 300, 500, 500);
+        Registrarse.setBounds(600, 300, 500, 500);
         this.setVisible(false);
     }//GEN-LAST:event_jButton2ActionPerformed
 
@@ -250,6 +271,122 @@ public class Usuario extends javax.swing.JFrame {
          Registrarse.setVisible(false);
         
     }//GEN-LAST:event_jButton4ActionPerformed
+    
+    public void leerRegistro(String archivo, String usuario, boolean confirmar){
+        try {
+            FileReader fr= new FileReader(archivo);
+            BufferedReader br= new BufferedReader(fr);
+            String line = br.readLine();
+            String[] campos;
+            while(line!=null){
+                campos= line.split(",");
+                if(usuario.equals(campos[0])){
+                    confirmar= true;
+                }else{
+                    line = br.readLine();
+                }
+            }
+            br.close();
+            fr.close();
+        } catch (Exception e) {
+        }
+    }
+    /*public void grabarRegistro(String Archivo, String Usuario, String Clave, boolean confirmar){
+        if (confirmar==true) {
+            JOptionPane.showMessageDialog(null, "EL nombre de Usuario ya existe");
+            nombre.setText("");
+        } else {
+            try {
+                DefaultTableModel model = (DefaultTableModel) registro.getModel();
+                model.addRow(new Object[]{Usuario , Clave});
+            } catch (Exception e) {
+            }
+            //RegistroUsuario = new File("./registro.txt");
+            DefaultTableModel model2= (DefaultTableModel) registro.getModel();
+            try(BufferedWriter bw = new BufferedWriter(new FileWriter(RegistroUsuario,true))) {
+                 int filas= registro.getRowCount();
+                 for (int i = 0; i < filas; i++) {
+                    Object nombreUsuario = model2.getValueAt(i, 0);
+                    Object security = model2.getValueAt(i, 1);
+                    bw.write(nombreUsuario + "," + security);
+                    bw.newLine();
+                }
+                 bw.close();
+            } catch (Exception e) {
+            }
+        }
+    }*/
+    public boolean verificarLogin(String Archivo, String nombre, String contraseña){
+        System.out.println("ENTRÓ A VERIFICAR LOGIN");
+        try {
+            FileReader fr= new FileReader (Archivo);
+            System.out.println("creó el file");
+            BufferedReader br = new BufferedReader(fr);
+            System.out.println("entro al buffer");
+            String Linea = br.readLine();
+            String[] campos;
+            while(Linea!=null){
+                System.out.println("Entro al while");
+                campos = Linea.split(",");
+                System.out.println(nombre);
+                System.out.println(contraseña);
+                if (nombre.equals(campos[0]) && contraseña.equals(campos[1])) {
+                    return true;
+                } else {
+                    Linea= br.readLine();
+                }
+            }
+            br.close();
+            fr.close();
+        } catch (Exception e) {
+        }
+        return false;
+    }
+    
+    
+    
+    public boolean verificarUsuario(String archivo, String nombre){
+        try{
+        FileReader fr= new FileReader(archivo);
+        BufferedReader br= new BufferedReader(fr);
+        String linea = br.readLine();
+        String[] campos;
+        while(linea!=null){
+            campos= linea.split(",");
+            if(nombre.equals(campos[0])){
+                return true;
+            }else{
+                linea = br.readLine();
+            }
+        }
+        br.close();
+        fr.close();
+        
+        }catch (Exception e){
+        }
+        return false;
+    }
+    private void ingresarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ingresarButtonActionPerformed
+        // TODO add your handling code here:
+          boolean login = false;
+        String archivo = "./registro.txt";
+        String contraseña1 = new String(contraseña.getPassword());
+        String contraseña2 = new String(validacion.getPassword());
+        if(verificarUsuario(archivo, nombre.getText())==false){
+        if (contraseña1.equals(contraseña2)){
+            leerRegistro(archivo, nombre.getText(), login);
+            //grabarRegistro(archivo, nombre.getText(), contraseña1, login);
+            JOptionPane.showMessageDialog(null, "Registro exitoso");
+        } else {
+            JOptionPane.showMessageDialog(null, "Claves no coinciden");
+            validacion.setText("");
+        }
+        }else{
+         JOptionPane.showMessageDialog(null, "Usuario ya existente");
+         nombre.setText("");
+         
+        }
+    }//GEN-LAST:event_ingresarButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -288,6 +425,9 @@ public class Usuario extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JFrame Registrarse;
+    private javax.swing.JTextField codigo;
+    private javax.swing.JPasswordField contraseña;
+    private javax.swing.JButton ingresarButton;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
@@ -299,9 +439,7 @@ public class Usuario extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPasswordField jPasswordField1;
-    private javax.swing.JPasswordField jPasswordField2;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
+    private javax.swing.JTextField nombre;
+    private javax.swing.JPasswordField validacion;
     // End of variables declaration//GEN-END:variables
 }

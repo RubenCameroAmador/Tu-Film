@@ -13,8 +13,9 @@ import java.io.FileWriter;
 import java.io.PrintWriter;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.table.DefaultTableModel;
+import javax.swing.JComboBox;
+import javax.swing.JOptionPane;
+
 
 /**
  *
@@ -23,60 +24,170 @@ import javax.swing.table.DefaultTableModel;
 public class Administrador extends javax.swing.JFrame {
    ImageIcon imagen;
    String proovedorPeli = "";
+   String estadoPeli="";
    Nodo ptr;
+   Estado ptr2;
+   tipoPeli ptr3;
    File archivoProovedor;
+   File archivoEstado;
+   File archivoTipoPeli;
     /**
      * Creates new form Administrador
      */
     public Administrador() {
         initComponents();
         ptr= null;
-        archivoProovedor = new File("./arProvedor.txt");
-        
-        
+        ptr2= null;
+        ptr3=null;
+        archivoProovedor = new File("./archivoProovedor.txt");
+        archivoEstado = new File("./archivoEstado.txt");
+        archivoTipoPeli = new File("./archivoTipoPeli.txt");
+        DefaultListModel model = new DefaultListModel();
+        proovedorList.setModel(model);
+        extraerArchivo("archivoProovedor.txt",proovedor);
+        extraerArchivo("archivoEstado.txt",Estado);
+        extraerArchivo("archivoTipoPeli.txt",tipoPeliculaBox);
+    }
+    class Estado{
+        Estado linkEstado;
+        String estado;
+        String numeroEstado;
+    }
+    class tipoPeli{
+        tipoPeli linkT;
+        String tipo;
+        String numTipo;
+    }
+    class Nodo{
+    Nodo link;
+    String Proovedor;
+    String numero;
+}
+    
+    public Nodo crearLista(Nodo ptr, String nombreProovedor, String num){
+        Nodo p = new Nodo();
+        p.numero= num;
+        p.Proovedor= nombreProovedor;
+        p.link=ptr;
+        ptr=p;
+        return ptr;
+    }
+    public tipoPeli crearLista(tipoPeli ptr, String nombreTipo, String numTipo){
+        tipoPeli p = new tipoPeli();
+        p.numTipo= numTipo;
+        p.tipo= nombreTipo;
+        p.linkT=ptr;
+        ptr=p;
+        return ptr;
+    }
+    public Estado crearLista(Estado ptr, String estado, String num){
+        Estado p = new Estado();
+        p.estado= estado;
+        p.numeroEstado= num;
+        p.linkEstado=ptr;
+        ptr=p;
+        return ptr;
+    }
+    
+    public void mostrarLista(Nodo ptr){
+        DefaultListModel model = (DefaultListModel) proovedorList.getModel();
+        model.clear();
+        Nodo p = ptr;
+        while( p!=null ){
+            model.addElement(p.numero+","+p.Proovedor);
+            
+            p = p.link;
+        }
+    }
+    public void mostrarLista(tipoPeli ptr){
+        DefaultListModel model = (DefaultListModel) proovedorList.getModel();
+        model.clear();
+        tipoPeli p = ptr;
+        while( p!=null ){
+            model.addElement(p.numTipo+","+p.tipo);
+            
+            p = p.linkT;
+        }
+    }
+    public void mostrarLista(Estado ptr){
+         DefaultListModel model = (DefaultListModel) proovedorList.getModel();
+         model.clear();
+         Estado p = ptr;
+         while(p!=null){
+             model.addElement(p.numeroEstado+","+p.estado);
+             p=p.linkEstado;
+         }
+    }
+    
+    public void agregarArchivo(Nodo ptr, File archivo){
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(archivo, true))){
+            Nodo p= ptr;
+            while(p!=null){
+                bw.write(p.numero+","+p.Proovedor);
+                bw.newLine();
+                p=p.link;
+            }
+            bw.close();
+        } catch (Exception e) {
+            System.out.println("Error grabar archivo:" + e.getMessage());
+        }
+    }
+    public void agregarArchivo(tipoPeli ptr, File archivo){
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(archivo, true))){
+            tipoPeli p= ptr;
+            while(p!=null){
+                bw.write(p.numTipo+","+p.tipo);
+                bw.newLine();
+                p=p.linkT;
+            }
+            bw.close();
+        } catch (Exception e) {
+            System.out.println("Error grabar archivo:" + e.getMessage());
+        }
+    }
+    public void agregarArchivo(Estado ptr, File archivo){
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(archivo, true))){
+            Estado p= ptr;
+            while(p!=null){
+                bw.write(p.numeroEstado+","+p.estado);
+                bw.newLine();
+                p=p.linkEstado;
+            }
+            bw.close();
+        } catch (Exception e) {
+            System.out.println("Error grabar archivo:" + e.getMessage());
+        }
+    }
+    public void extraerArchivo(String archivo, JComboBox box){
         try {
-            FileReader fr= new FileReader(archivoProovedor);
+            FileReader fr= new FileReader(archivo);
             BufferedReader br= new BufferedReader(fr);
             String linea;
             linea = br.readLine();
             String[] campos;
+            int cont=0;
+            boolean entro = false;
             while(linea!=null){
-                campos = linea.split(",");
-                proovedor.addItem(campos[0]);
-                linea= br.readLine();
+                entro = true;
+                campos= linea.split(",");
+                box.insertItemAt(campos[1], cont);
+                cont++;
+                linea = br.readLine();
             }
-            br.close();
-            fr.close();
+            if(entro==false){
+                JOptionPane.showMessageDialog(null, "No se encontraró");
+            }
         } catch (Exception e) {
-            System.out.println("NO se pudo asignar valor al comboBox"+e.getMessage());
+            System.out.println("No extrajo la información de el archivo"+e.getMessage());
         }
     }
     
-    class Nodo{
-    Nodo link;
-    String Proovedor;
-    int numero;
-}
-    public Nodo crearLista(Nodo ptr, String nombreProovedor, int num){
-        Nodo p = new Nodo();
-        p.numero= num;
-        p.Proovedor= nombreProovedor;
-        ptr=p;
-        return ptr;
+    
+    public void getComboBox(String nombreVariable,String BoxSalario){
+        //estadoPeli= boxSalario
+     nombreVariable = BoxSalario;
     }
-
-    public void mostrarLista(Nodo ptr){
-        DefaultListModel model = (DefaultListModel) proovedorList.getModel();
-         model.clear();
-         Nodo p=ptr;
-         while(p!=null){
-             model.addElement(p.numero+","+p.Proovedor);
-             p=p.link;
-         }
-    }
-    public void getProovedor(String BoxSalario){
-     proovedorPeli = BoxSalario;
-    }
+    
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -104,10 +215,10 @@ public class Administrador extends javax.swing.JFrame {
         proovedor = new javax.swing.JComboBox<>();
         jLabel8 = new javax.swing.JLabel();
         tipoPelicula = new javax.swing.JTextField();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        tipoPeliculaBox = new javax.swing.JComboBox<>();
         jLabel9 = new javax.swing.JLabel();
         estado = new javax.swing.JTextField();
-        jComboBox2 = new javax.swing.JComboBox<>();
+        Estado = new javax.swing.JComboBox<>();
         jLabel10 = new javax.swing.JLabel();
         duracion = new javax.swing.JTextField();
         jLabel11 = new javax.swing.JLabel();
@@ -130,9 +241,20 @@ public class Administrador extends javax.swing.JFrame {
         jLabel15 = new javax.swing.JLabel();
         proovedorNumber = new javax.swing.JTextField();
         proovedorSave = new javax.swing.JButton();
-        jScrollPane3 = new javax.swing.JScrollPane();
-        ProovedorTable = new javax.swing.JTable();
         jButton6 = new javax.swing.JButton();
+        jLabel21 = new javax.swing.JLabel();
+        jLabel22 = new javax.swing.JLabel();
+        estadoName = new javax.swing.JTextField();
+        jLabel23 = new javax.swing.JLabel();
+        estadoNumber = new javax.swing.JTextField();
+        estadoSave = new javax.swing.JButton();
+        jLabel24 = new javax.swing.JLabel();
+        jLabel25 = new javax.swing.JLabel();
+        jLabel26 = new javax.swing.JLabel();
+        tipoName = new javax.swing.JTextField();
+        label = new javax.swing.JLabel();
+        tipoNumber = new javax.swing.JTextField();
+        tipoSave = new javax.swing.JButton();
         gestionFunciones = new javax.swing.JFrame();
         jPanel4 = new javax.swing.JPanel();
         jButton7 = new javax.swing.JButton();
@@ -153,8 +275,9 @@ public class Administrador extends javax.swing.JFrame {
         jLabel20 = new javax.swing.JLabel();
         jTextField6 = new javax.swing.JTextField();
         jComboBox7 = new javax.swing.JComboBox<>();
-        jScrollPane4 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        boletas = new javax.swing.JFrame();
+        jPanel5 = new javax.swing.JPanel();
+        jButton9 = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
@@ -184,6 +307,12 @@ public class Administrador extends javax.swing.JFrame {
         proovedorNum.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 proovedorNumActionPerformed(evt);
+            }
+        });
+
+        proovedor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                proovedorActionPerformed(evt);
             }
         });
 
@@ -303,8 +432,8 @@ public class Administrador extends javax.swing.JFrame {
                                     .addGroup(jPanel2Layout.createSequentialGroup()
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                            .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                            .addComponent(jComboBox2, 0, 235, Short.MAX_VALUE)))
+                                            .addComponent(tipoPeliculaBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addComponent(Estado, 0, 235, Short.MAX_VALUE)))
                                     .addGroup(jPanel2Layout.createSequentialGroup()
                                         .addGap(57, 57, 57)
                                         .addComponent(jLabel11)
@@ -396,13 +525,13 @@ public class Administrador extends javax.swing.JFrame {
                             .addComponent(jLabel8)
                             .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                 .addComponent(tipoPelicula, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(tipoPeliculaBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel9)
                             .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                 .addComponent(estado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(Estado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel10)
@@ -453,35 +582,6 @@ public class Administrador extends javax.swing.JFrame {
             }
         });
 
-        ProovedorTable.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                "Nombre", "Numero"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.String.class, java.lang.Integer.class
-            };
-            boolean[] canEdit = new boolean [] {
-                false, false
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
-        jScrollPane3.setViewportView(ProovedorTable);
-        if (ProovedorTable.getColumnModel().getColumnCount() > 0) {
-            ProovedorTable.getColumnModel().getColumn(0).setResizable(false);
-            ProovedorTable.getColumnModel().getColumn(1).setResizable(false);
-        }
-
         jButton6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/tu/film/imagenes/flecha_ant_.gif"))); // NOI18N
         jButton6.setBorder(null);
         jButton6.setBorderPainted(false);
@@ -497,61 +597,144 @@ public class Administrador extends javax.swing.JFrame {
             }
         });
 
+        jLabel21.setText("Estado");
+
+        jLabel22.setText("Tipo de estado: ");
+
+        jLabel23.setText("Numero Estado:");
+
+        estadoSave.setText("SAVE");
+        estadoSave.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                estadoSaveActionPerformed(evt);
+            }
+        });
+
+        jLabel24.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
+        jLabel25.setText("Tipo de Pelicula");
+
+        jLabel26.setText("Nombre Tipo:");
+
+        label.setText("Numero Tipo:");
+
+        tipoSave.setText("SAVE");
+        tipoSave.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tipoSaveActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout ListasLayout = new javax.swing.GroupLayout(Listas.getContentPane());
         Listas.getContentPane().setLayout(ListasLayout);
         ListasLayout.setHorizontalGroup(
             ListasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(ListasLayout.createSequentialGroup()
+                .addGroup(ListasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(ListasLayout.createSequentialGroup()
+                        .addGap(30, 30, 30)
+                        .addGroup(ListasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel15)
+                            .addComponent(jLabel14))
+                        .addGap(18, 18, 18)
+                        .addGroup(ListasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(proovedorname)
+                            .addComponent(proovedorNumber, javax.swing.GroupLayout.DEFAULT_SIZE, 139, Short.MAX_VALUE)))
+                    .addGroup(ListasLayout.createSequentialGroup()
+                        .addComponent(jButton6)
+                        .addGap(58, 58, 58)
+                        .addComponent(jLabel12))
+                    .addGroup(ListasLayout.createSequentialGroup()
+                        .addGap(104, 104, 104)
+                        .addComponent(proovedorSave, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(ListasLayout.createSequentialGroup()
+                        .addGap(134, 134, 134)
+                        .addComponent(jLabel21, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(ListasLayout.createSequentialGroup()
+                        .addGap(43, 43, 43)
+                        .addGroup(ListasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel23, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel22, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(18, 18, 18)
+                        .addGroup(ListasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(estadoName)
+                            .addComponent(estadoNumber))))
+                .addGroup(ListasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(ListasLayout.createSequentialGroup()
+                        .addGap(205, 205, 205)
+                        .addGroup(ListasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, ListasLayout.createSequentialGroup()
+                                .addGap(88, 88, 88)
+                                .addComponent(jLabel25)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, ListasLayout.createSequentialGroup()
+                                .addComponent(jLabel26, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(tipoName, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(261, 261, 261))))
+                    .addGroup(ListasLayout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(label, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(tipoNumber, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(261, 261, 261))))
+            .addGroup(ListasLayout.createSequentialGroup()
                 .addGroup(ListasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(ListasLayout.createSequentialGroup()
-                        .addGroup(ListasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(ListasLayout.createSequentialGroup()
-                                .addGap(30, 30, 30)
-                                .addGroup(ListasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabel15)
-                                    .addComponent(jLabel14))
-                                .addGap(18, 18, 18)
-                                .addGroup(ListasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(proovedorname)
-                                    .addComponent(proovedorNumber, javax.swing.GroupLayout.DEFAULT_SIZE, 139, Short.MAX_VALUE)))
-                            .addGroup(ListasLayout.createSequentialGroup()
-                                .addGap(104, 104, 104)
-                                .addComponent(proovedorSave, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(ListasLayout.createSequentialGroup()
-                                .addComponent(jButton6)
-                                .addGap(58, 58, 58)
-                                .addComponent(jLabel12)))
-                        .addGap(72, 72, 72)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(ListasLayout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 340, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(512, Short.MAX_VALUE))
+                        .addComponent(jLabel24, javax.swing.GroupLayout.PREFERRED_SIZE, 315, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(ListasLayout.createSequentialGroup()
+                        .addGap(108, 108, 108)
+                        .addComponent(estadoSave, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(34, 34, 34)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(173, 173, 173)
+                .addComponent(tipoSave, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         ListasLayout.setVerticalGroup(
             ListasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(ListasLayout.createSequentialGroup()
+                .addGroup(ListasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(ListasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel12)
+                        .addComponent(jLabel25))
+                    .addComponent(jButton6))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(ListasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel14)
+                    .addComponent(proovedorname, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel26)
+                    .addComponent(tipoName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(ListasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel15)
+                    .addComponent(proovedorNumber, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(tipoNumber, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(label))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(ListasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(ListasLayout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, ListasLayout.createSequentialGroup()
-                        .addGroup(ListasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel12)
-                            .addComponent(jButton6))
+                        .addGroup(ListasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(ListasLayout.createSequentialGroup()
+                                .addComponent(proovedorSave)
+                                .addGap(16, 16, 16)
+                                .addComponent(jLabel24))
+                            .addComponent(tipoSave))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(ListasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel14)
-                            .addComponent(proovedorname, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(ListasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel15)
-                            .addComponent(proovedorNumber, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jLabel21)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(proovedorSave)))
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(464, Short.MAX_VALUE))
+                        .addGroup(ListasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel22)
+                            .addComponent(estadoName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(ListasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel23)
+                            .addComponent(estadoNumber, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(22, 22, 22)
+                        .addComponent(estadoSave))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 270, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(393, Short.MAX_VALUE))
         );
 
         jButton7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/tu/film/imagenes/flecha_ant_.gif"))); // NOI18N
@@ -685,9 +868,48 @@ public class Administrador extends javax.swing.JFrame {
             .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane4.setViewportView(jTextArea1);
+        jButton9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/tu/film/imagenes/flecha_ant_.gif"))); // NOI18N
+        jButton9.setBorder(null);
+        jButton9.setBorderPainted(false);
+        jButton9.setContentAreaFilled(false);
+        jButton9.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButton9.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jButton9.setIconTextGap(-3);
+        jButton9.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
+        jButton9.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jButton9.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton9ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
+        jPanel5.setLayout(jPanel5Layout);
+        jPanel5Layout.setHorizontalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jButton9)
+                .addContainerGap(326, Short.MAX_VALUE))
+        );
+        jPanel5Layout.setVerticalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addGap(12, 12, 12)
+                .addComponent(jButton9)
+                .addContainerGap(243, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout boletasLayout = new javax.swing.GroupLayout(boletas.getContentPane());
+        boletas.getContentPane().setLayout(boletasLayout);
+        boletasLayout.setHorizontalGroup(
+            boletasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        boletasLayout.setVerticalGroup(
+            boletasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -889,34 +1111,13 @@ public class Administrador extends javax.swing.JFrame {
 
     private void proovedorSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_proovedorSaveActionPerformed
         // TODO add your handling code here:
-        String nameProovedor = proovedorname.getText();
-        int number = Integer.parseInt(proovedorNumber.getText()); 
-        try{
-        DefaultTableModel model = (DefaultTableModel) ProovedorTable.getModel();
-        model.addRow(new Object[]{nameProovedor, number});
-        }catch(Exception e){
-            System.out.println("Error en agregar" + e.getMessage());
-        }
-        DefaultTableModel model2 = (DefaultTableModel) ProovedorTable.getModel();
-        try {
-            PrintWriter writer = new PrintWriter(archivoProovedor);
-            writer.print("");
-            writer.close();
-        } catch (Exception e) {
-              System.out.println("Error Limpiar archivo: " + e.getMessage());
-        }
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(archivoProovedor,true))){
-            int filas = ProovedorTable.getRowCount();
-            for (int i = 0; i < filas; i++) {
-                Object nameProovedor1 = model2.getValueAt(i,0);
-                Object numeroProovedor1= model2.getValueAt(i, 1);
-                bw.write(nameProovedor1+","+numeroProovedor1);
-                bw.newLine();
-            }
-            bw.close();
-        } catch (Exception e) {
-             System.out.println("Error Guardar: "+e.getMessage());
-        }
+     String provedor = proovedorname.getText();
+     String numero = proovedorNumber.getText();
+    
+     ptr= crearLista(ptr, provedor, numero);
+     mostrarLista(ptr);
+     agregarArchivo(ptr,archivoProovedor);
+     
     }//GEN-LAST:event_proovedorSaveActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -928,6 +1129,9 @@ public class Administrador extends javax.swing.JFrame {
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
+        boletas.setVisible(true);
+        boletas.setBounds(600, 300, 500, 400);
+        this.setVisible(false);
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
@@ -965,6 +1169,33 @@ public class Administrador extends javax.swing.JFrame {
             gestionFunciones.setVisible(false);
     }//GEN-LAST:event_jButton7ActionPerformed
 
+    private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
+        // TODO add your handling code here:
+        Administrador a= new Administrador();
+        a.setVisible(true);
+        a.setBounds(570, 300, 560, 530);
+        boletas.setVisible(false);
+    }//GEN-LAST:event_jButton9ActionPerformed
+
+    private void proovedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_proovedorActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_proovedorActionPerformed
+
+    private void estadoSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_estadoSaveActionPerformed
+        // TODO add your handling code here:
+     ptr2= crearLista(ptr2, estadoName.getText(), estadoNumber.getText());
+     mostrarLista(ptr2);
+     agregarArchivo(ptr2,archivoEstado);
+        
+    }//GEN-LAST:event_estadoSaveActionPerformed
+
+    private void tipoSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tipoSaveActionPerformed
+        // TODO add your handling code here:
+     ptr3= crearLista(ptr3, tipoName.getText(), tipoNumber.getText());
+     mostrarLista(ptr3);
+     agregarArchivo(ptr3,archivoTipoPeli);
+    }//GEN-LAST:event_tipoSaveActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -1001,17 +1232,21 @@ public class Administrador extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox<String> Estado;
     private javax.swing.JFrame Listas;
-    private javax.swing.JTable ProovedorTable;
     private javax.swing.JButton Siguiente;
     private javax.swing.JTextField abreviatura;
     private javax.swing.JButton agregar;
     private javax.swing.JButton anterior;
+    private javax.swing.JFrame boletas;
     private javax.swing.JTextField codigoINCAA;
     private javax.swing.JTextField codigoPelicula;
     private javax.swing.JTextField condicion;
     private javax.swing.JTextField duracion;
     private javax.swing.JTextField estado;
+    private javax.swing.JTextField estadoName;
+    private javax.swing.JTextField estadoNumber;
+    private javax.swing.JButton estadoSave;
     private javax.swing.JTextField formato;
     private javax.swing.JLabel foto;
     private javax.swing.JFrame gestionFunciones;
@@ -1024,8 +1259,7 @@ public class Administrador extends javax.swing.JFrame {
     private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
     private javax.swing.JButton jButton8;
-    private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JComboBox<String> jComboBox2;
+    private javax.swing.JButton jButton9;
     private javax.swing.JComboBox<String> jComboBox3;
     private javax.swing.JComboBox<String> jComboBox4;
     private javax.swing.JComboBox<String> jComboBox5;
@@ -1044,6 +1278,12 @@ public class Administrador extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
+    private javax.swing.JLabel jLabel21;
+    private javax.swing.JLabel jLabel22;
+    private javax.swing.JLabel jLabel23;
+    private javax.swing.JLabel jLabel24;
+    private javax.swing.JLabel jLabel25;
+    private javax.swing.JLabel jLabel26;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -1055,18 +1295,17 @@ public class Administrador extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JTable jTable1;
-    private javax.swing.JTextArea jTextArea1;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField3;
     private javax.swing.JTextField jTextField4;
     private javax.swing.JTextField jTextField5;
     private javax.swing.JTextField jTextField6;
+    private javax.swing.JLabel label;
     private javax.swing.JTextField nombrePelicula;
     private javax.swing.JComboBox<String> proovedor;
     private javax.swing.JList<String> proovedorList;
@@ -1074,6 +1313,10 @@ public class Administrador extends javax.swing.JFrame {
     private javax.swing.JTextField proovedorNumber;
     private javax.swing.JButton proovedorSave;
     private javax.swing.JTextField proovedorname;
+    private javax.swing.JTextField tipoName;
+    private javax.swing.JTextField tipoNumber;
     private javax.swing.JTextField tipoPelicula;
+    private javax.swing.JComboBox<String> tipoPeliculaBox;
+    private javax.swing.JButton tipoSave;
     // End of variables declaration//GEN-END:variables
 }

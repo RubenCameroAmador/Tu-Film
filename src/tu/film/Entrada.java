@@ -81,6 +81,7 @@ public class Entrada extends javax.swing.JFrame {
         si = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
         jLabel3 = new javax.swing.JLabel();
         administrador = new javax.swing.JMenuBar();
@@ -191,16 +192,28 @@ public class Entrada extends javax.swing.JFrame {
 
         jMenuItem2.setText("jMenuItem2");
 
+        ingresoUsuario.getContentPane().setLayout(null);
+
+        jPanel2.setLayout(null);
+
         hora.setFont(new java.awt.Font("Segoe Print", 3, 32)); // NOI18N
-        hora.setText("        Hora");
+        hora.setText("Hora");
+        jPanel2.add(hora);
+        hora.setBounds(240, 30, 320, 58);
 
         fecha.setFont(new java.awt.Font("Segoe Print", 3, 32)); // NOI18N
-        fecha.setText("        Fecha");
+        fecha.setText("Fecha");
+        jPanel2.add(fecha);
+        fecha.setBounds(250, 80, 330, 58);
 
         jLabel5.setFont(new java.awt.Font("Segoe Print", 3, 27)); // NOI18N
         jLabel5.setText("¿Tiene o desea obtener una cuenta en Tu-Film?");
+        jPanel2.add(jLabel5);
+        jLabel5.setBounds(20, 210, 695, 78);
 
+        si.setFont(new java.awt.Font("Segoe Print", 3, 16)); // NOI18N
         si.setIcon(new javax.swing.ImageIcon(getClass().getResource("/tu/film/imagenes/si_.jpg"))); // NOI18N
+        si.setText("YES");
         si.setBorder(null);
         si.setBorderPainted(false);
         si.setContentAreaFilled(false);
@@ -215,8 +228,12 @@ public class Entrada extends javax.swing.JFrame {
                 siActionPerformed(evt);
             }
         });
+        jPanel2.add(si);
+        si.setBounds(210, 297, 111, 120);
 
+        jButton3.setFont(new java.awt.Font("Segoe Print", 3, 16)); // NOI18N
         jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/tu/film/imagenes/no_.jpg"))); // NOI18N
+        jButton3.setText("NO");
         jButton3.setBorder(null);
         jButton3.setBorderPainted(false);
         jButton3.setContentAreaFilled(false);
@@ -225,72 +242,26 @@ public class Entrada extends javax.swing.JFrame {
         jButton3.setIconTextGap(-3);
         jButton3.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
         jButton3.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jPanel2.add(jButton3);
+        jButton3.setBounds(390, 290, 109, 120);
 
         jLabel6.setFont(new java.awt.Font("Segoe Print", 3, 36)); // NOI18N
-        jLabel6.setText("¡BIENBENIDOS!");
+        jLabel6.setText("              ¡BIENBENIDOS!");
+        jPanel2.add(jLabel6);
+        jLabel6.setBounds(10, 150, 700, 65);
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(217, 217, 217)
-                .addComponent(si)
-                .addGap(85, 85, 85)
-                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addGap(0, 46, Short.MAX_VALUE)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 315, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(248, 248, 248))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 695, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(39, 39, 39))))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addComponent(fecha, javax.swing.GroupLayout.PREFERRED_SIZE, 351, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(hora, javax.swing.GroupLayout.PREFERRED_SIZE, 351, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(170, 170, 170))
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(48, 48, 48)
-                .addComponent(hora, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(fecha)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel6)
-                .addGap(43, 43, 43)
-                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(42, 42, 42)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(si)
-                    .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(65, 65, 65))
-        );
+        jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/tu/film/imagenes/fondo_.jpg"))); // NOI18N
+        jPanel2.add(jLabel7);
+        jLabel7.setBounds(0, 0, 820, 600);
 
-        javax.swing.GroupLayout ingresoUsuarioLayout = new javax.swing.GroupLayout(ingresoUsuario.getContentPane());
-        ingresoUsuario.getContentPane().setLayout(ingresoUsuarioLayout);
-        ingresoUsuarioLayout.setHorizontalGroup(
-            ingresoUsuarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-        ingresoUsuarioLayout.setVerticalGroup(
-            ingresoUsuarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
+        ingresoUsuario.getContentPane().add(jPanel2);
+        jPanel2.setBounds(0, 0, 698, 434);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/tu/film/imagenes/tu_film_.jpg"))); // NOI18N
 
-        jMenu2.setText("Seleccionar");
+        jMenu2.setText("Menu");
 
         usuario.setText("Usuario");
         usuario.addActionListener(new java.awt.event.ActionListener() {
@@ -356,7 +327,7 @@ public class Entrada extends javax.swing.JFrame {
    
         ingresoUsuario.setVisible(true);
         ingresoUsuario.setLocationRelativeTo(null);
-        ingresoUsuario.setBounds(570, 280, 800, 560);
+        ingresoUsuario.setBounds(570, 280, 710, 490);
        this.setVisible(false);
     }//GEN-LAST:event_usuarioActionPerformed
 
@@ -382,7 +353,7 @@ public class Entrada extends javax.swing.JFrame {
         // TODO add your handling code here:
         Usuario s= new Usuario();
         s.setVisible(true);
-        s.setBounds(560, 300, 460, 480);
+        s.setBounds(620, 300, 460, 480);
         ingresoUsuario.setVisible(false);
         
     }//GEN-LAST:event_siActionPerformed
@@ -437,6 +408,7 @@ public class Entrada extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JPanel jPanel1;
