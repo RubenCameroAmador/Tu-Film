@@ -1,1 +1,4 @@
-1,1,1,1,1,Marvel,Terror,ejemplo1,1,1,:)
+3,05,HarryPotter,Harry,HD,DcComic,Terror,ejemplo1,54,54,:)
+4,54,Narnia,Nar,HD,DarkHouse,Accion,ejemplo1,23,432,:)
+54,654,Lo que el agua se llevo,water,,Columbia,Accion,ejemplo1,1:30,5584,:)
+6979,5847,Harry Potter y la Piedra Filosofal,Harry Potter,2D,Columbia,Terror,ejemplo1,2:30,buena,C:\Users\Ruben Camero\Pictures\HarryPotter.jpg

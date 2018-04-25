@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package tu.film;
+import java.awt.Image;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -12,9 +13,12 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.swing.DefaultListModel;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 
 
@@ -35,6 +39,7 @@ public class Administrador extends javax.swing.JFrame {
    File archivoEstado;
    File archivoTipoPeli;
    File archivoPelicula;
+   int posicion;
     /**
      * Creates new form Administrador
      */
@@ -43,6 +48,7 @@ public class Administrador extends javax.swing.JFrame {
         ptr= null;
         ptr2= null;
         ptr3=null;
+        posicion=0;
         archivoProovedor = new File("./archivoProovedor.txt");
         archivoEstado = new File("./archivoEstado.txt");
         archivoTipoPeli = new File("./archivoTipoPeli.txt");
@@ -52,6 +58,16 @@ public class Administrador extends javax.swing.JFrame {
         extraerArchivo("archivoProovedor.txt",proovedor);
         extraerArchivo("archivoEstado.txt",Estado);
         extraerArchivo("archivoTipoPeli.txt",tipoPeliculaBox);
+        
+        String[] columnas =new String[11];
+        for (int i = 0; i < 11 ; i++) {
+            columnas[i]=Peliculas.getModel().getColumnName(i);
+        }
+        try {
+            Peliculas.setModel(TuFilm.Mostrar("archivoPelicula.txt", columnas));
+        } catch (Exception e) {
+            System.out.println("Error en mostrar el archivo existente"+e.getMessage());
+        }
     }
     class Estado{
         Estado linkEstado;
@@ -187,6 +203,47 @@ public class Administrador extends javax.swing.JFrame {
         }
     }
     
+    public void escribirDatosDer(String archivo, int posicion){
+        try{
+            int i=0;
+            int tamañoFila = Peliculas.getRowCount();
+        FileReader fr= new FileReader(archivo);
+        BufferedReader br= new BufferedReader(fr);
+            String linea;
+            linea = br.readLine();
+            String[] campos;
+            while((linea!=null)&&(i<=tamañoFila)){
+            campos=linea.split(",");
+            if(i==posicion){
+                codigoPelicula.setText(campos[0]);
+                codigoINCAA.setText(campos[1]);
+                nombrePelicula.setText(campos[2]);
+                abreviatura.setText(campos[3]);
+                formato.setText(campos[4]);
+                proovedorNumber.setText(mostrarNumero("archivoProovedor.txt",campos[5]));
+                //¡OJO CON EL SIGUIENTE PASO. PEUDE SER ERROR! El DE setActionCommand
+                proovedorLabel.setText(campos[5]);
+                tipoPelicula.setText(mostrarNumero("archivoTipoPeli.txt",campos[6]));
+                tipoPeliculaBox.setActionCommand(campos[6]);
+                estado.setText(mostrarNumero("archivoEstado.txt",campos[7]));
+                Estado.setActionCommand(campos[7]);
+                duracion.setText(campos[8]);
+                condicion.setText(campos[9]);
+                ImageIcon imagen1 = new ImageIcon(campos[10]);
+                Icon icono= new ImageIcon(imagen1.getImage().getScaledInstance(foto.getWidth(), foto.getHeight(), Image.SCALE_DEFAULT));
+                foto.setIcon(icono);
+                posicion++;
+            }else{
+                i++;
+                linea = br.readLine();
+            }
+            }
+            br.close();
+            fr.close();
+        }catch(Exception e){
+            System.out.println("Error al pasar el archivo"+e.getMessage());
+        }
+    }
     
     public void getEstado(String nombreVariable){
     estadoPeli= nombreVariable;
@@ -199,6 +256,30 @@ public class Administrador extends javax.swing.JFrame {
     public void getTipoPelicula(String nombreVariable){
     tipoPeliculas= nombreVariable;
     System.out.println("entra");
+    }
+    
+    public String mostrarNumero(String archivo, String informacion){
+        try {
+            FileReader fr= new FileReader(archivo);
+            BufferedReader br= new BufferedReader(fr);
+            String linea;
+            linea = br.readLine();
+            String[] campos;
+            while(linea!=null){
+                campos=linea.split(",");
+                if(informacion.equalsIgnoreCase(campos[1])){
+                  return campos[0];  
+                }else{
+                    linea = br.readLine();
+                }
+            }
+            br.close();
+            fr.close();
+            return null;
+        } catch (Exception e) {
+            System.out.println("Error al buscar el numero"+e.getMessage());
+        }
+        return null;
     }
     
     /**
@@ -244,6 +325,8 @@ public class Administrador extends javax.swing.JFrame {
         agregar = new javax.swing.JButton();
         jLabel13 = new javax.swing.JLabel();
         jButton8 = new javax.swing.JButton();
+        insertarImagen = new javax.swing.JButton();
+        proovedorLabel = new javax.swing.JLabel();
         Listas = new javax.swing.JFrame();
         jScrollPane2 = new javax.swing.JScrollPane();
         proovedorList = new javax.swing.JList<>();
@@ -290,6 +373,7 @@ public class Administrador extends javax.swing.JFrame {
         boletas = new javax.swing.JFrame();
         jPanel5 = new javax.swing.JPanel();
         jButton9 = new javax.swing.JButton();
+        buscar = new javax.swing.JFileChooser();
         jPanel1 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
@@ -368,7 +452,7 @@ public class Administrador extends javax.swing.JFrame {
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(foto, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(foto, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -446,78 +530,89 @@ public class Administrador extends javax.swing.JFrame {
             }
         });
 
+        insertarImagen.setText("Insertar Imagen");
+        insertarImagen.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                insertarImagenActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(44, 44, 44)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel8)
-                                    .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel10))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(tipoPelicula, javax.swing.GroupLayout.DEFAULT_SIZE, 71, Short.MAX_VALUE)
-                                    .addComponent(estado)
-                                    .addComponent(duracion))
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addGroup(jPanel2Layout.createSequentialGroup()
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                            .addComponent(tipoPeliculaBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                            .addComponent(Estado, 0, 235, Short.MAX_VALUE)))
-                                    .addGroup(jPanel2Layout.createSequentialGroup()
-                                        .addGap(57, 57, 57)
-                                        .addComponent(jLabel11)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(condicion, javax.swing.GroupLayout.DEFAULT_SIZE, 105, Short.MAX_VALUE))))
-                            .addComponent(jLabel13))
                         .addGap(44, 44, 44)
-                        .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel5)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel7))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(codigoPelicula, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(jLabel4)
-                                .addGap(18, 18, 18)
-                                .addComponent(codigoINCAA))
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addGroup(jPanel2Layout.createSequentialGroup()
+                                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel8)
+                                            .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jLabel10))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addComponent(tipoPelicula, javax.swing.GroupLayout.DEFAULT_SIZE, 71, Short.MAX_VALUE)
+                                            .addComponent(estado)
+                                            .addComponent(duracion))
+                                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                    .addComponent(tipoPeliculaBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                    .addComponent(Estado, 0, 235, Short.MAX_VALUE)))
+                                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                                .addGap(57, 57, 57)
+                                                .addComponent(jLabel11)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(condicion, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE))))
+                                    .addComponent(jLabel13)
+                                    .addComponent(insertarImagen))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(2, 2, 2))
                             .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(abreviatura, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(41, 41, 41)
-                                .addComponent(jLabel6)
-                                .addGap(18, 18, 18)
-                                .addComponent(formato))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                                .addComponent(proovedorNum, javax.swing.GroupLayout.DEFAULT_SIZE, 70, Short.MAX_VALUE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(proovedor, javax.swing.GroupLayout.PREFERRED_SIZE, 445, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(nombrePelicula))))
-                .addContainerGap())
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jButton8)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(anterior)
-                .addGap(28, 28, 28)
-                .addComponent(Siguiente, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(32, 32, 32)
-                .addComponent(agregar)
-                .addGap(301, 301, 301))
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1007, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel5)
+                                    .addComponent(jLabel3)
+                                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel7))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel2Layout.createSequentialGroup()
+                                        .addComponent(anterior)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(Siguiente, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(agregar))
+                                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addGroup(jPanel2Layout.createSequentialGroup()
+                                            .addComponent(codigoPelicula, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addGap(18, 18, 18)
+                                            .addComponent(jLabel4)
+                                            .addGap(18, 18, 18)
+                                            .addComponent(codigoINCAA))
+                                        .addGroup(jPanel2Layout.createSequentialGroup()
+                                            .addComponent(abreviatura, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addGap(41, 41, 41)
+                                            .addComponent(jLabel6)
+                                            .addGap(18, 18, 18)
+                                            .addComponent(formato))
+                                        .addComponent(nombrePelicula)
+                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                                            .addComponent(proovedorNum, javax.swing.GroupLayout.DEFAULT_SIZE, 70, Short.MAX_VALUE)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addComponent(proovedor, javax.swing.GroupLayout.PREFERRED_SIZE, 445, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(proovedorLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 355, javax.swing.GroupLayout.PREFERRED_SIZE))))))))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jButton8))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 651, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(18, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -545,7 +640,9 @@ public class Administrador extends javax.swing.JFrame {
                     .addComponent(abreviatura, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel6)
                     .addComponent(formato, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                .addGap(3, 3, 3)
+                .addComponent(proovedorLabel)
+                .addGap(1, 1, 1)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
                     .addComponent(proovedorNum, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -571,8 +668,10 @@ public class Administrador extends javax.swing.JFrame {
                             .addComponent(duracion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel11)
                             .addComponent(condicion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel13)))
+                        .addGap(32, 32, 32)
+                        .addComponent(jLabel13)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(insertarImagen)))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 267, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(32, Short.MAX_VALUE))
@@ -1124,6 +1223,7 @@ public class Administrador extends javax.swing.JFrame {
 
     private void SiguienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SiguienteActionPerformed
         // TODO add your handling code here:
+        escribirDatosDer("archivoPelicula.txt",posicion);
     }//GEN-LAST:event_SiguienteActionPerformed
 
     private void agregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_agregarActionPerformed
@@ -1131,28 +1231,35 @@ public class Administrador extends javax.swing.JFrame {
         getEstado(Estado.getSelectedItem().toString());
         getProovedor(proovedor.getSelectedItem().toString());
         getTipoPelicula(tipoPeliculaBox.getSelectedItem().toString());
-        rutaImagen= ":)";
-        try{
             DefaultTableModel model = (DefaultTableModel) Peliculas.getModel();
             String estado1= estadoPeli;
-            System.out.println(estado1+"*");
             String proovedor1 = proovedorPeli;
-            System.out.println(proovedor1+"**");
             String tipoPeli1 = tipoPeliculas;
+            proovedorNum.setText(mostrarNumero("archivoProovedor.txt",proovedor1));
+            estado.setText(mostrarNumero("archivoEstado.txt",estado1));
+            tipoPelicula.setText(mostrarNumero("archivoTipoPeli.txt",tipoPeli1));
             model.addRow(new Object[]{codigoPelicula.getText(), codigoINCAA.getText(),
             nombrePelicula.getText(),abreviatura.getText(),formato.getText(),proovedorPeli,
             tipoPeli1,estado1,duracion.getText(),condicion.getText(),rutaImagen} );
-        }catch(Exception e){}
-        
+
+             ImageIcon imagen1 = new ImageIcon(rutaImagen);
+             Icon icono= new ImageIcon(imagen1.getImage().getScaledInstance(foto.getWidth(), foto.getHeight(), Image.SCALE_DEFAULT));
+             foto.setIcon(icono);
+
+            
+        int desicion = JOptionPane.showConfirmDialog(null, "¿Deseas guardar la pelicula?");
+        if(desicion==JOptionPane.YES_OPTION){
+            
+            
         archivoPelicula = new File("./archivoPelicula.txt");
         DefaultTableModel model2 = (DefaultTableModel) Peliculas.getModel();
-        try {
+        /*try {
             PrintWriter writer = new PrintWriter(archivoPelicula);
             writer.print("");
             writer.close();
         } catch (Exception e) {
             System.out.println("Error Limpiar archivo: " + e.getMessage());
-        }
+        }*/
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(archivoPelicula, true))) {
             int filas = Peliculas.getRowCount();
             for (int i = 0; i < filas; i++) {
@@ -1174,7 +1281,7 @@ public class Administrador extends javax.swing.JFrame {
         } catch (IOException e) {
             System.out.println("Error guardar archivo");
         }
-        
+        }
     }//GEN-LAST:event_agregarActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
@@ -1272,6 +1379,19 @@ public class Administrador extends javax.swing.JFrame {
      agregarArchivo(ptr3,archivoTipoPeli);
     }//GEN-LAST:event_tipoSaveActionPerformed
 
+    private void insertarImagenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_insertarImagenActionPerformed
+        // TODO add your handling code here:
+         FileNameExtensionFilter filtro = new FileNameExtensionFilter("Imagenes", "jpg", "gif", "png");
+         buscar.setFileFilter(filtro);
+          int a = buscar.showOpenDialog(this);
+          if( a== JFileChooser.APPROVE_OPTION){
+            File archivo = buscar.getSelectedFile();
+            String nombre2 = archivo.getName();
+            String ruta = archivo.getParent();
+            rutaImagen = ruta+ "\\"+nombre2; 
+          }
+    }//GEN-LAST:event_insertarImagenActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -1316,6 +1436,7 @@ public class Administrador extends javax.swing.JFrame {
     private javax.swing.JButton agregar;
     private javax.swing.JButton anterior;
     private javax.swing.JFrame boletas;
+    private javax.swing.JFileChooser buscar;
     private javax.swing.JTextField codigoINCAA;
     private javax.swing.JTextField codigoPelicula;
     private javax.swing.JTextField condicion;
@@ -1328,6 +1449,7 @@ public class Administrador extends javax.swing.JFrame {
     private javax.swing.JLabel foto;
     private javax.swing.JFrame gestionFunciones;
     private javax.swing.JFrame gestionPelicula;
+    private javax.swing.JButton insertarImagen;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
@@ -1384,6 +1506,7 @@ public class Administrador extends javax.swing.JFrame {
     private javax.swing.JLabel label;
     private javax.swing.JTextField nombrePelicula;
     private javax.swing.JComboBox<String> proovedor;
+    private javax.swing.JLabel proovedorLabel;
     private javax.swing.JList<String> proovedorList;
     private javax.swing.JTextField proovedorNum;
     private javax.swing.JTextField proovedorNumber;

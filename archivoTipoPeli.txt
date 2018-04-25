@@ -1,3 +1,2 @@
 1,Terror
 2,Accion
-1,Terror
