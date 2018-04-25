@@ -4,17 +4,18 @@
  * and open the template in the editor.
  */
 package tu.film;
-//hello este fue un ejemplo de github
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.io.PrintWriter;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 
 /**
@@ -25,12 +26,15 @@ public class Administrador extends javax.swing.JFrame {
    ImageIcon imagen;
    String proovedorPeli = "";
    String estadoPeli="";
+   String tipoPeliculas="";
+   String rutaImagen;
    Nodo ptr;
    Estado ptr2;
    tipoPeli ptr3;
    File archivoProovedor;
    File archivoEstado;
    File archivoTipoPeli;
+   File archivoPelicula;
     /**
      * Creates new form Administrador
      */
@@ -42,6 +46,7 @@ public class Administrador extends javax.swing.JFrame {
         archivoProovedor = new File("./archivoProovedor.txt");
         archivoEstado = new File("./archivoEstado.txt");
         archivoTipoPeli = new File("./archivoTipoPeli.txt");
+     
         DefaultListModel model = new DefaultListModel();
         proovedorList.setModel(model);
         extraerArchivo("archivoProovedor.txt",proovedor);
@@ -183,11 +188,18 @@ public class Administrador extends javax.swing.JFrame {
     }
     
     
-    public void getComboBox(String nombreVariable,String BoxSalario){
-        //estadoPeli= boxSalario
-     nombreVariable = BoxSalario;
+    public void getEstado(String nombreVariable){
+    estadoPeli= nombreVariable;
+    System.out.println("entra");
     }
-    
+    public void getProovedor(String nombreVariable){
+    proovedorPeli= nombreVariable;
+    System.out.println("entra");
+    }
+    public void getTipoPelicula(String nombreVariable){
+    tipoPeliculas= nombreVariable;
+    System.out.println("entra");
+    }
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -226,7 +238,7 @@ public class Administrador extends javax.swing.JFrame {
         jPanel3 = new javax.swing.JPanel();
         foto = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        Peliculas = new javax.swing.JTable();
         Siguiente = new javax.swing.JButton();
         anterior = new javax.swing.JButton();
         agregar = new javax.swing.JButton();
@@ -363,18 +375,43 @@ public class Administrador extends javax.swing.JFrame {
             .addComponent(foto, javax.swing.GroupLayout.DEFAULT_SIZE, 190, Short.MAX_VALUE)
         );
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        Peliculas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Codigo", "CodigoINCAA", "Nombre", "Abreviatura", "Formato", "Proovedor", "TipoPelicula", "Estado", "Duracion", "Condicion", "Foto"
             }
-        ));
-        jScrollPane1.setViewportView(jTable1);
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false, false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane1.setViewportView(Peliculas);
+        if (Peliculas.getColumnModel().getColumnCount() > 0) {
+            Peliculas.getColumnModel().getColumn(0).setResizable(false);
+            Peliculas.getColumnModel().getColumn(1).setResizable(false);
+            Peliculas.getColumnModel().getColumn(2).setResizable(false);
+            Peliculas.getColumnModel().getColumn(3).setResizable(false);
+            Peliculas.getColumnModel().getColumn(4).setResizable(false);
+            Peliculas.getColumnModel().getColumn(5).setResizable(false);
+            Peliculas.getColumnModel().getColumn(6).setResizable(false);
+            Peliculas.getColumnModel().getColumn(7).setResizable(false);
+            Peliculas.getColumnModel().getColumn(8).setResizable(false);
+            Peliculas.getColumnModel().getColumn(9).setResizable(false);
+            Peliculas.getColumnModel().getColumn(10).setResizable(false);
+        }
 
         Siguiente.setText("Siguiente");
         Siguiente.addActionListener(new java.awt.event.ActionListener() {
@@ -444,59 +481,55 @@ public class Administrador extends javax.swing.JFrame {
                         .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 638, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel5)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel7))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel5)
-                                    .addComponent(jLabel3)
-                                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel7))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addGroup(jPanel2Layout.createSequentialGroup()
-                                        .addComponent(codigoPelicula, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(jLabel4)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(codigoINCAA))
-                                    .addGroup(jPanel2Layout.createSequentialGroup()
-                                        .addComponent(abreviatura, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(41, 41, 41)
-                                        .addComponent(jLabel6)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(formato))
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                                        .addComponent(proovedorNum, javax.swing.GroupLayout.DEFAULT_SIZE, 70, Short.MAX_VALUE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(proovedor, javax.swing.GroupLayout.PREFERRED_SIZE, 445, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(nombrePelicula))))
-                        .addGap(0, 76, Short.MAX_VALUE)))
+                                .addComponent(codigoPelicula, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jLabel4)
+                                .addGap(18, 18, 18)
+                                .addComponent(codigoINCAA))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(abreviatura, javax.swing.GroupLayout.PREFERRED_SIZE, 209, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(41, 41, 41)
+                                .addComponent(jLabel6)
+                                .addGap(18, 18, 18)
+                                .addComponent(formato))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                                .addComponent(proovedorNum, javax.swing.GroupLayout.DEFAULT_SIZE, 70, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(proovedor, javax.swing.GroupLayout.PREFERRED_SIZE, 445, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(nombrePelicula))))
                 .addContainerGap())
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jButton8)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(anterior)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(28, 28, 28)
                 .addComponent(Siguiente, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(32, 32, 32)
                 .addComponent(agregar)
-                .addGap(136, 136, 136))
+                .addGap(301, 301, 301))
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1007, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(36, 36, 36)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(Siguiente)
-                            .addComponent(anterior)
-                            .addComponent(agregar)))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jButton8)))
-                .addGap(18, 18, 18)
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(anterior)
+                        .addComponent(Siguiente)
+                        .addComponent(agregar))
+                    .addComponent(jButton8))
+                .addGap(22, 22, 22)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(codigoPelicula, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1095,10 +1128,53 @@ public class Administrador extends javax.swing.JFrame {
 
     private void agregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_agregarActionPerformed
         // TODO add your handling code here:
-        String codigoP= codigoPelicula.getText();
-        String codigoI= codigoINCAA.getText();
-        String nombreP= nombrePelicula.getText();
-        String abreviaturaP = abreviatura.getText();
+        getEstado(Estado.getSelectedItem().toString());
+        getProovedor(proovedor.getSelectedItem().toString());
+        getTipoPelicula(tipoPeliculaBox.getSelectedItem().toString());
+        rutaImagen= ":)";
+        try{
+            DefaultTableModel model = (DefaultTableModel) Peliculas.getModel();
+            String estado1= estadoPeli;
+            System.out.println(estado1+"*");
+            String proovedor1 = proovedorPeli;
+            System.out.println(proovedor1+"**");
+            String tipoPeli1 = tipoPeliculas;
+            model.addRow(new Object[]{codigoPelicula.getText(), codigoINCAA.getText(),
+            nombrePelicula.getText(),abreviatura.getText(),formato.getText(),proovedorPeli,
+            tipoPeli1,estado1,duracion.getText(),condicion.getText(),rutaImagen} );
+        }catch(Exception e){}
+        
+        archivoPelicula = new File("./archivoPelicula.txt");
+        DefaultTableModel model2 = (DefaultTableModel) Peliculas.getModel();
+        try {
+            PrintWriter writer = new PrintWriter(archivoPelicula);
+            writer.print("");
+            writer.close();
+        } catch (Exception e) {
+            System.out.println("Error Limpiar archivo: " + e.getMessage());
+        }
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(archivoPelicula, true))) {
+            int filas = Peliculas.getRowCount();
+            for (int i = 0; i < filas; i++) {
+                Object codigoP = model2.getValueAt(i, 0);
+                Object codigoIP = model2.getValueAt(i, 1);
+                Object nombrep = model2.getValueAt(i, 2);
+                Object abreviaturap = model2.getValueAt(i, 3);
+                Object formatop = model2.getValueAt(i, 4);
+                Object proovedorp = model2.getValueAt(i, 5);
+                Object tipoPeliculap = model2.getValueAt(i, 6);
+                Object estadop = model2.getValueAt(i, 7);
+                Object duracionp = model2.getValueAt(i, 8);
+                Object condicionp = model2.getValueAt(i, 9);
+                Object fotop = model2.getValueAt(i, 10);
+                bw.write(codigoP+","+codigoIP+","+nombrep+","+abreviaturap+","+formatop+","+proovedorp+","+tipoPeliculap+","+estadop+","+duracionp+","+condicionp+","+fotop);
+                bw.newLine();
+            }
+            bw.close();
+        } catch (IOException e) {
+            System.out.println("Error guardar archivo");
+        }
+        
     }//GEN-LAST:event_agregarActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
@@ -1234,6 +1310,7 @@ public class Administrador extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> Estado;
     private javax.swing.JFrame Listas;
+    private javax.swing.JTable Peliculas;
     private javax.swing.JButton Siguiente;
     private javax.swing.JTextField abreviatura;
     private javax.swing.JButton agregar;
@@ -1298,7 +1375,6 @@ public class Administrador extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTable jTable1;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField3;
