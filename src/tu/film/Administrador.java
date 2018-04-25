@@ -11,7 +11,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.swing.DefaultListModel;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -285,6 +284,7 @@ public class Administrador extends javax.swing.JFrame {
         showInformation = new javax.swing.JButton();
         tipoPeliLabel = new javax.swing.JLabel();
         estadoLabel = new javax.swing.JLabel();
+        eliminarButton = new javax.swing.JButton();
         Listas = new javax.swing.JFrame();
         jScrollPane2 = new javax.swing.JScrollPane();
         proovedorList = new javax.swing.JList<>();
@@ -497,6 +497,13 @@ public class Administrador extends javax.swing.JFrame {
 
         estadoLabel.setText("jLabel27");
 
+        eliminarButton.setText("Eliminar");
+        eliminarButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                eliminarButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -581,7 +588,8 @@ public class Administrador extends javax.swing.JFrame {
                                                                     .addComponent(condicion, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)))))))
                                             .addComponent(estadoLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 281, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                     .addGroup(jPanel2Layout.createSequentialGroup()
-                                        .addGap(48, 48, 48)
+                                        .addComponent(eliminarButton)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                         .addComponent(showInformation)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(agregar)))
@@ -658,7 +666,8 @@ public class Administrador extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(agregar)
-                            .addComponent(showInformation))))
+                            .addComponent(showInformation)
+                            .addComponent(eliminarButton))))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -1404,6 +1413,17 @@ public class Administrador extends javax.swing.JFrame {
         foto.setIcon(icono);
     }//GEN-LAST:event_showInformationActionPerformed
 
+    private void eliminarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_eliminarButtonActionPerformed
+        // TODO add your handling code here:
+         DefaultTableModel model = (DefaultTableModel) Peliculas.getModel();
+        int elim = Peliculas.getSelectedRow();
+        if(elim>=0){
+            model.removeRow(elim);
+        }else{
+            JOptionPane.showMessageDialog(null, "No se pudo eliminar la Pelicula");
+        }
+    }//GEN-LAST:event_eliminarButtonActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -1451,6 +1471,7 @@ public class Administrador extends javax.swing.JFrame {
     private javax.swing.JTextField codigoPelicula;
     private javax.swing.JTextField condicion;
     private javax.swing.JTextField duracion;
+    private javax.swing.JButton eliminarButton;
     private javax.swing.JTextField estado;
     private javax.swing.JLabel estadoLabel;
     private javax.swing.JTextField estadoName;
