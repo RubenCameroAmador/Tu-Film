@@ -66,6 +66,9 @@ public class Administrador extends javax.swing.JFrame {
         } catch (Exception e) {
             System.out.println("Error en mostrar el archivo existente"+e.getMessage());
         }
+        
+        //Gestion Salas
+        getPelicula("archivoPelicula.txt");
     }
     class Estado{
         Estado linkEstado;
@@ -237,6 +240,28 @@ public class Administrador extends javax.swing.JFrame {
         }
         return null;
     }
+   
+   //////////////////////////////////////////////////////////////////////////////
+    //Gestion Salas de Cine/////
+    
+    public void getPelicula(String archivo){
+        try{
+            FileReader fr= new FileReader(archivo);
+            BufferedReader br= new BufferedReader(fr);
+            String linea;
+            linea = br.readLine();
+            String[] campos;
+            int pos=0;
+            while(linea!=null){
+                campos= linea.split(",");
+                BoxPelicula.insertItemAt(campos[2], pos);
+                pos++;
+                linea = br.readLine();
+            }
+            br.close();
+            fr.close();
+        }catch(Exception e){}
+    }
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -315,6 +340,9 @@ public class Administrador extends javax.swing.JFrame {
         BoxPelicula = new javax.swing.JComboBox<>();
         jLabel29 = new javax.swing.JLabel();
         BoxHorario = new javax.swing.JComboBox<>();
+        jLabel30 = new javax.swing.JLabel();
+        jComboBox1 = new javax.swing.JComboBox<>();
+        buttonGestion = new javax.swing.JButton();
         boletas = new javax.swing.JFrame();
         jPanel5 = new javax.swing.JPanel();
         jButton9 = new javax.swing.JButton();
@@ -876,42 +904,55 @@ public class Administrador extends javax.swing.JFrame {
 
         jLabel28.setText("Pelicula: ");
 
-        BoxPelicula.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jLabel29.setText("Día : ");
 
-        jLabel29.setText("Horario:");
-
-        BoxHorario.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        BoxHorario.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado", "Domingo", " " }));
         BoxHorario.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 BoxHorarioActionPerformed(evt);
             }
         });
 
+        jLabel30.setText("Hora: ");
+
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        buttonGestion.setText("Gestionar Función");
+
         javax.swing.GroupLayout gestionFuncionesLayout = new javax.swing.GroupLayout(gestionFunciones.getContentPane());
         gestionFunciones.getContentPane().setLayout(gestionFuncionesLayout);
         gestionFuncionesLayout.setHorizontalGroup(
             gestionFuncionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(gestionFuncionesLayout.createSequentialGroup()
-                .addGap(58, 58, 58)
-                .addGroup(gestionFuncionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(gestionFuncionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(gestionFuncionesLayout.createSequentialGroup()
-                        .addComponent(jLabel28)
-                        .addGap(18, 18, 18)
-                        .addComponent(BoxPelicula, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(58, 58, 58)
+                        .addGroup(gestionFuncionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(gestionFuncionesLayout.createSequentialGroup()
+                                .addComponent(jLabel28)
+                                .addGap(18, 18, 18)
+                                .addComponent(BoxPelicula, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(gestionFuncionesLayout.createSequentialGroup()
+                                .addComponent(jLabel27, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(BoxSala, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, gestionFuncionesLayout.createSequentialGroup()
+                                .addGroup(gestionFuncionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel29)
+                                    .addComponent(jLabel30))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(gestionFuncionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(BoxHorario, 0, 118, Short.MAX_VALUE)
+                                    .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
                     .addGroup(gestionFuncionesLayout.createSequentialGroup()
-                        .addComponent(jLabel27, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(BoxSala, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(gestionFuncionesLayout.createSequentialGroup()
-                        .addComponent(jLabel29)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(BoxHorario, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(90, 90, 90)
+                        .addComponent(buttonGestion)))
                 .addContainerGap(488, Short.MAX_VALUE))
         );
         gestionFuncionesLayout.setVerticalGroup(
             gestionFuncionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(gestionFuncionesLayout.createSequentialGroup()
-                .addContainerGap(267, Short.MAX_VALUE)
+                .addContainerGap(264, Short.MAX_VALUE)
                 .addGroup(gestionFuncionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel27)
                     .addComponent(BoxSala, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -923,7 +964,13 @@ public class Administrador extends javax.swing.JFrame {
                 .addGroup(gestionFuncionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel29)
                     .addComponent(BoxHorario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(223, 223, 223))
+                .addGap(18, 18, 18)
+                .addGroup(gestionFuncionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel30)
+                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(buttonGestion)
+                .addGap(147, 147, 147))
         );
 
         jButton9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/tu/film/imagenes/flecha_ant_.gif"))); // NOI18N
@@ -1536,6 +1583,7 @@ public class Administrador extends javax.swing.JFrame {
     private javax.swing.JButton agregar;
     private javax.swing.JFrame boletas;
     private javax.swing.JFileChooser buscar;
+    private javax.swing.JButton buttonGestion;
     private javax.swing.JTextField codigoINCAA;
     private javax.swing.JTextField codigoPelicula;
     private javax.swing.JTextField condicion;
@@ -1560,6 +1608,7 @@ public class Administrador extends javax.swing.JFrame {
     private javax.swing.JButton jButton7;
     private javax.swing.JButton jButton8;
     private javax.swing.JButton jButton9;
+    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JComboBox<String> jComboBox3;
     private javax.swing.JComboBox<String> jComboBox4;
     private javax.swing.JComboBox<String> jComboBox5;
@@ -1588,6 +1637,7 @@ public class Administrador extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel28;
     private javax.swing.JLabel jLabel29;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel30;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
