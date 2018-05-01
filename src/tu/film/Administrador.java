@@ -38,6 +38,7 @@ public class Administrador extends javax.swing.JFrame {
    File archivoEstado;
    File archivoTipoPeli;
    File archivoPelicula;
+   sala ptrSala;
     /**
      * Creates new form Administrador
      */
@@ -68,7 +69,12 @@ public class Administrador extends javax.swing.JFrame {
         }
         
         //Gestion Salas
+        ptrSala=null;
         getPelicula("archivoPelicula.txt");
+        listaAgregarFuncion.setModel(new DefaultListModel());
+        ptrSala = insertarSala( ptrSala, "Sala 1");
+        ptrSala = insertarSala( ptrSala, "Sala 2");
+        mostrarLista(ptrSala);
     }
     class Estado{
         Estado linkEstado;
@@ -263,6 +269,73 @@ public class Administrador extends javax.swing.JFrame {
         }catch(Exception e){}
     }
     
+    class sala{
+        String nombre;
+        sala LinkSala;
+        diaSemana linkdDaySala;
+    }
+    class diaSemana{
+        String dia;
+        diaSemana linkDay;
+    }
+    public void buscarSala(sala ptr, String nombreSala, sala p, sala antp){
+        p=ptr;
+        antp=null;
+        while(!p.nombre.equals(nombreSala)&&p.LinkSala!=null){
+            antp=p;
+            p=p.LinkSala;
+        }
+        if(p.nombre.equalsIgnoreCase(nombreSala) && p.LinkSala==null){
+            p=null;
+        }
+    }
+    sala insertarSala(sala ptr, String nombre){
+          sala p = new sala();
+          p.nombre=nombre;
+        if (ptr == null) {
+          return p;
+        }
+        sala q = ptr;
+        while(q.LinkSala!=null){
+            q=q.LinkSala;
+        }
+        q.LinkSala=p;
+        return ptr;
+    }
+     //Hacer bien el algoritmo para ingresar correctamente el dia de la semana 
+    void insertarDiaPelicula(sala ptr, String nombreSala, String dia){
+        sala p=null;
+        sala antp=null;
+        buscarSala(ptr,nombreSala,p,antp);
+        if(p!=null){
+            if(p.linkdDaySala==null){
+                diaSemana q= new diaSemana();
+                q.dia=dia;
+                p.linkdDaySala=q;
+                q.linkDay=null;
+            }else{
+                diaSemana r= new diaSemana();
+                r.dia=dia;
+                p.linkdDaySala=r;
+                
+                
+            }
+        }
+    
+    }
+    
+    public void mostrarLista(sala ptr){
+        DefaultListModel model = (DefaultListModel) listaAgregarFuncion.getModel();
+        model.clear();
+        sala p = ptr;
+        while( p!=null ){
+            model.addElement(p.nombre);
+            
+            p = p.LinkSala;
+        }
+    }
+    
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -343,6 +416,8 @@ public class Administrador extends javax.swing.JFrame {
         jLabel30 = new javax.swing.JLabel();
         jComboBox1 = new javax.swing.JComboBox<>();
         buttonGestion = new javax.swing.JButton();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        listaAgregarFuncion = new javax.swing.JList<>();
         boletas = new javax.swing.JFrame();
         jPanel5 = new javax.swing.JPanel();
         jButton9 = new javax.swing.JButton();
@@ -818,7 +893,7 @@ public class Administrador extends javax.swing.JFrame {
                             .addComponent(jLabel22, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(18, 18, 18)
                         .addGroup(ListasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(estadoName)
+                            .addComponent(estadoName, javax.swing.GroupLayout.DEFAULT_SIZE, 138, Short.MAX_VALUE)
                             .addComponent(estadoNumber))))
                 .addGroup(ListasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(ListasLayout.createSequentialGroup()
@@ -917,7 +992,14 @@ public class Administrador extends javax.swing.JFrame {
 
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
-        buttonGestion.setText("Gestionar Función");
+        buttonGestion.setText("Agregar Función");
+        buttonGestion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonGestionActionPerformed(evt);
+            }
+        });
+
+        jScrollPane3.setViewportView(listaAgregarFuncion);
 
         javax.swing.GroupLayout gestionFuncionesLayout = new javax.swing.GroupLayout(gestionFunciones.getContentPane());
         gestionFunciones.getContentPane().setLayout(gestionFuncionesLayout);
@@ -925,6 +1007,9 @@ public class Administrador extends javax.swing.JFrame {
             gestionFuncionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(gestionFuncionesLayout.createSequentialGroup()
                 .addGroup(gestionFuncionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(gestionFuncionesLayout.createSequentialGroup()
+                        .addGap(90, 90, 90)
+                        .addComponent(buttonGestion))
                     .addGroup(gestionFuncionesLayout.createSequentialGroup()
                         .addGap(58, 58, 58)
                         .addGroup(gestionFuncionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -943,16 +1028,16 @@ public class Administrador extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addGroup(gestionFuncionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(BoxHorario, 0, 118, Short.MAX_VALUE)
-                                    .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
-                    .addGroup(gestionFuncionesLayout.createSequentialGroup()
-                        .addGap(90, 90, 90)
-                        .addComponent(buttonGestion)))
-                .addContainerGap(488, Short.MAX_VALUE))
+                                    .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(461, Short.MAX_VALUE))
         );
         gestionFuncionesLayout.setVerticalGroup(
             gestionFuncionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(gestionFuncionesLayout.createSequentialGroup()
-                .addContainerGap(264, Short.MAX_VALUE)
+                .addGap(36, 36, 36)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
                 .addGroup(gestionFuncionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel27)
                     .addComponent(BoxSala, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -1537,6 +1622,10 @@ public class Administrador extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_BoxHorarioActionPerformed
 
+    private void buttonGestionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonGestionActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_buttonGestionActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -1651,6 +1740,7 @@ public class Administrador extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField3;
@@ -1658,6 +1748,7 @@ public class Administrador extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField5;
     private javax.swing.JTextField jTextField6;
     private javax.swing.JLabel label;
+    private javax.swing.JList<String> listaAgregarFuncion;
     private javax.swing.JTextField nombrePelicula;
     private javax.swing.JComboBox<String> proovedor;
     private javax.swing.JLabel proovedorLabel;
