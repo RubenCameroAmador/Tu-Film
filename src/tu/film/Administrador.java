@@ -31,6 +31,10 @@ public class Administrador extends javax.swing.JFrame {
    String estadoPeli="";
    String tipoPeliculas="";
    String rutaImagen;
+   String salaBox;
+   String movieBox;
+   String horaBox;
+   String diaBox;
    Nodo ptr;
    Estado ptr2;
    tipoPeli ptr3;
@@ -74,7 +78,21 @@ public class Administrador extends javax.swing.JFrame {
         listaAgregarFuncion.setModel(new DefaultListModel());
         ptrSala = insertarSala( ptrSala, "Sala 1");
         ptrSala = insertarSala( ptrSala, "Sala 2");
-        mostrarLista(ptrSala);
+        ptrSala = insertarDia( ptrSala, "Sala 1", "Lunes");
+        ptrSala = insertarDia( ptrSala, "Sala 1", "Martes");
+        ptrSala = insertarDia( ptrSala, "Sala 1", "Miercoles");
+        ptrSala = insertarDia( ptrSala, "Sala 1", "Jueves");
+        ptrSala = insertarDia( ptrSala, "Sala 1", "Viernes");
+        ptrSala = insertarDia( ptrSala, "Sala 1", "Sabado");
+        ptrSala = insertarDia( ptrSala, "Sala 1", "Domingo");
+        ptrSala = insertarDia( ptrSala, "Sala 2", "Lunes");
+        ptrSala = insertarDia( ptrSala, "Sala 2", "Martes");
+        ptrSala = insertarDia( ptrSala, "Sala 2", "Miercoles");
+        ptrSala = insertarDia( ptrSala, "Sala 2", "Jueves");
+        ptrSala = insertarDia( ptrSala, "Sala 2", "Viernes");
+        ptrSala = insertarDia( ptrSala, "Sala 2", "Sabado");
+        ptrSala = insertarDia( ptrSala, "Sala 2", "Domingo");
+        mostrarMultilista(ptrSala);
     }
     class Estado{
         Estado linkEstado;
@@ -247,7 +265,7 @@ public class Administrador extends javax.swing.JFrame {
         return null;
     }
    
-   //////////////////////////////////////////////////////////////////////////////
+   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //Gestion Salas de Cine/////
     
     public void getPelicula(String archivo){
@@ -277,21 +295,65 @@ public class Administrador extends javax.swing.JFrame {
     class diaSemana{
         String dia;
         diaSemana linkDay;
+        pelicula link2Pelicula;
+    }
+    class pelicula{
+        String peliculaNombre;
+        String diaPelicula;
+        int horaPelicula;
+        pelicula linkPelicula;
+    }
+    public void getSala(String Sala){
+    salaBox= Sala;
+    }
+    public void getMovie(String movie){
+    movieBox= movie;
+    }
+    public void getHora(String hora){
+    horaBox= hora;
+    }
+    public void getDia(String dia){
+    diaBox= dia;
     }
     public void buscarSala(sala ptr, String nombreSala, sala p, sala antp){
+        System.out.println("Entro a buscar sala ");
         p=ptr;
         antp=null;
-        while(!p.nombre.equals(nombreSala)&&p.LinkSala!=null){
+        while(!p.nombre.equalsIgnoreCase(nombreSala)&&p.LinkSala!=null){
             antp=p;
             p=p.LinkSala;
         }
-        if(p.nombre.equalsIgnoreCase(nombreSala) && p.LinkSala==null){
+        if(!p.nombre.equalsIgnoreCase(nombreSala) && p.LinkSala==null){
             p=null;
         }
+        
+    }
+    public void buscarDiaSemana(sala ptr, String nombreSala, String dia, sala p, sala antp, diaSemana q, diaSemana antq){
+        System.out.println("Entro a buscar dia de semana");
+        buscarSala(ptr,nombreSala,p,antp);
+        if(p==null){
+            System.out.println("¡La sala no existe!");
+        }else{
+            antq=null;
+            q=p.linkdDaySala;
+            if(q!=null){
+                while(q.dia!=dia && q.linkDay!=null){
+                    antq=q;
+                    q=q.linkDay;
+                }
+                if(q.dia.equals(dia)&& q.linkDay==null){
+                    q=null;
+                }
+            }else{
+                System.out.println("No hay jugadores en el equipo");
+            }
+        }
+        
+    
     }
     sala insertarSala(sala ptr, String nombre){
-          sala p = new sala();
-          p.nombre=nombre;
+         sala p = new sala();
+         p.nombre=nombre;
         if (ptr == null) {
           return p;
         }
@@ -302,36 +364,128 @@ public class Administrador extends javax.swing.JFrame {
         q.LinkSala=p;
         return ptr;
     }
-     //Hacer bien el algoritmo para ingresar correctamente el dia de la semana 
-    void insertarDiaPelicula(sala ptr, String nombreSala, String dia){
-        sala p=null;
-        sala antp=null;
-        buscarSala(ptr,nombreSala,p,antp);
-        if(p!=null){
-            if(p.linkdDaySala==null){
-                diaSemana q= new diaSemana();
-                q.dia=dia;
-                p.linkdDaySala=q;
-                q.linkDay=null;
-            }else{
-                diaSemana r= new diaSemana();
-                r.dia=dia;
-                p.linkdDaySala=r;
-                
-                
-            }
-        }
     
+    sala insertarDia(sala ptr, String nombreSala, String dia){
+        sala p = ptr;
+        while(p!=null&& !p.nombre.equals(nombreSala)){
+            p=p.LinkSala;
+        }
+        diaSemana q= p.linkdDaySala;
+        diaSemana r = new diaSemana();
+        r.dia=dia;
+        if(q==null){
+            p.linkdDaySala=r;
+        }else{
+            while(q.linkDay!=null){
+                q=q.linkDay;
+            }
+            q.linkDay=r;
+        }
+        return ptr;
     }
     
-    public void mostrarLista(sala ptr){
+       void insertarPelicula(sala ptr, String Sala, String dia, String nombrePelicula, int hora){
+           sala p=null;
+           sala antp=null;
+           diaSemana q=null;
+           diaSemana antq=null;
+           buscarDiaSemana(ptr, Sala, dia, p, antp, q, antq);
+           if(q!=null){
+                 pelicula r= new pelicula();
+               if(q.linkDay==null){
+                   r.peliculaNombre=nombrePelicula;
+                   r.horaPelicula=hora;
+                   q.link2Pelicula=r;
+                   r.linkPelicula=null;
+               }else{
+                   pelicula antr=null;
+                   r=q.link2Pelicula;
+                   while(r.horaPelicula<hora && r.linkPelicula!=null){
+                       antr=r;
+                       r=r.linkPelicula;
+                   }
+                   if(r.horaPelicula==hora){
+                       JOptionPane.showMessageDialog(null, "¡YA EXISTE UNA PELICULA AGREGADA A ESTA HORA!");
+                   }else{
+                       pelicula k = new pelicula();
+                       k.peliculaNombre=nombrePelicula;
+                       k.horaPelicula=hora;
+                       if(k.horaPelicula>hora){
+                           if(antr==null){
+                               q.link2Pelicula=k;
+                               k.linkPelicula=r;
+                           }else{
+                               antr.linkPelicula=k;
+                               k.linkPelicula=r;
+                           }
+                       }else{
+                           r.linkPelicula=k;
+                           k.linkPelicula=null;
+                       }
+                   }
+               }
+           }
+       }
+    /*sala insetarPelicula(sala ptr, String Sala, String dia, String nombrePelicula, int hora){
+        sala p= ptr;
+        while(p!=null && !p.nombre.equals(Sala)){
+            p=p.LinkSala;
+        }
+        diaSemana q= p.linkdDaySala;
+        while(q!=null && !q.dia.equals(dia)){
+            q=q.linkDay;
+        }
+        pelicula r = q.link2Pelicula;
+        pelicula k = new pelicula();
+        k.peliculaNombre=nombrePelicula;
+        k.horaPelicula=hora;
+        if(r==null){
+            q.link2Pelicula=k;
+        }else{
+            while(r.linkPelicula!=null){
+                if(hora!=r.horaPelicula){
+                r=r.linkPelicula;
+                }else{
+                    JOptionPane.showMessageDialog(null, "El horario de la pelicula ya existe, no puede adicionar la misma hora");
+                    return ptr;
+                }
+            }
+            r.linkPelicula=k;
+        }
+        return ptr;
+    }*/
+    
+    public void mostrarMultilista(sala ptr){
         DefaultListModel model = (DefaultListModel) listaAgregarFuncion.getModel();
         model.clear();
         sala p = ptr;
         while( p!=null ){
             model.addElement(p.nombre);
-            
+            diaSemana r = p.linkdDaySala;
+            while(r!=null){
+                model.addElement("==>"+r.dia);
+                r=r.linkDay;
+            }
             p = p.LinkSala;
+        }
+    }
+    public void mostrarMultilistaPelicula(sala ptr){
+        DefaultListModel model = (DefaultListModel) listaAgregarFuncion.getModel();
+        model.clear();
+        sala p = ptr;
+        while(p!=null){
+            model.addElement(p.nombre);
+            diaSemana r = p.linkdDaySala;
+            while(r!=null){
+                model.addElement("==>"+r.dia);
+                pelicula a = r.link2Pelicula;
+                while(a!=null){
+                    model.addElement("===>"+a.peliculaNombre+a.diaPelicula);
+                    a=a.linkPelicula;
+                }
+                r=r.linkDay;
+            }
+            p=p.LinkSala;
         }
     }
     
@@ -414,7 +568,7 @@ public class Administrador extends javax.swing.JFrame {
         jLabel29 = new javax.swing.JLabel();
         BoxHorario = new javax.swing.JComboBox<>();
         jLabel30 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        BoxHora = new javax.swing.JComboBox<>();
         buttonGestion = new javax.swing.JButton();
         jScrollPane3 = new javax.swing.JScrollPane();
         listaAgregarFuncion = new javax.swing.JList<>();
@@ -975,7 +1129,7 @@ public class Administrador extends javax.swing.JFrame {
 
         jLabel27.setText("Sala: ");
 
-        BoxSala.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Sala 1 ", "Sala 2" }));
+        BoxSala.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Sala 1", "Sala 2" }));
 
         jLabel28.setText("Pelicula: ");
 
@@ -990,7 +1144,7 @@ public class Administrador extends javax.swing.JFrame {
 
         jLabel30.setText("Hora: ");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        BoxHora.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21" }));
 
         buttonGestion.setText("Agregar Función");
         buttonGestion.addActionListener(new java.awt.event.ActionListener() {
@@ -1008,54 +1162,58 @@ public class Administrador extends javax.swing.JFrame {
             .addGroup(gestionFuncionesLayout.createSequentialGroup()
                 .addGroup(gestionFuncionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(gestionFuncionesLayout.createSequentialGroup()
-                        .addGap(90, 90, 90)
-                        .addComponent(buttonGestion))
-                    .addGroup(gestionFuncionesLayout.createSequentialGroup()
-                        .addGap(58, 58, 58)
+                        .addContainerGap()
                         .addGroup(gestionFuncionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(gestionFuncionesLayout.createSequentialGroup()
-                                .addComponent(jLabel28)
-                                .addGap(18, 18, 18)
-                                .addComponent(BoxPelicula, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(gestionFuncionesLayout.createSequentialGroup()
                                 .addComponent(jLabel27, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGap(18, 18, 18)
                                 .addComponent(BoxSala, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, gestionFuncionesLayout.createSequentialGroup()
+                            .addGroup(gestionFuncionesLayout.createSequentialGroup()
                                 .addGroup(gestionFuncionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel29)
-                                    .addComponent(jLabel30))
+                                    .addComponent(jLabel28)
+                                    .addComponent(jLabel29))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGroup(gestionFuncionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(BoxHorario, 0, 118, Short.MAX_VALUE)
-                                    .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(461, Short.MAX_VALUE))
+                                .addGroup(gestionFuncionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(BoxPelicula, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(BoxHorario, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(gestionFuncionesLayout.createSequentialGroup()
+                                .addComponent(jLabel30)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(BoxHora, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(gestionFuncionesLayout.createSequentialGroup()
+                        .addGap(43, 43, 43)
+                        .addComponent(buttonGestion)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 97, Short.MAX_VALUE)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 296, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(135, Short.MAX_VALUE))
         );
         gestionFuncionesLayout.setVerticalGroup(
             gestionFuncionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(gestionFuncionesLayout.createSequentialGroup()
-                .addGap(36, 36, 36)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
-                .addGroup(gestionFuncionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel27)
-                    .addComponent(BoxSala, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(gestionFuncionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel28)
-                    .addComponent(BoxPelicula, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(gestionFuncionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel29)
-                    .addComponent(BoxHorario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(gestionFuncionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel30)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(buttonGestion)
-                .addGap(147, 147, 147))
+                .addGroup(gestionFuncionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(gestionFuncionesLayout.createSequentialGroup()
+                        .addGap(47, 47, 47)
+                        .addGroup(gestionFuncionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel27)
+                            .addComponent(BoxSala, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(gestionFuncionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel28)
+                            .addComponent(BoxPelicula, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(gestionFuncionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel29)
+                            .addComponent(BoxHorario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(gestionFuncionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel30)
+                            .addComponent(BoxHora, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(26, 26, 26)
+                        .addComponent(buttonGestion))
+                    .addGroup(gestionFuncionesLayout.createSequentialGroup()
+                        .addGap(36, 36, 36)
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 379, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(171, Short.MAX_VALUE))
         );
 
         jButton9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/tu/film/imagenes/flecha_ant_.gif"))); // NOI18N
@@ -1624,6 +1782,12 @@ public class Administrador extends javax.swing.JFrame {
 
     private void buttonGestionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonGestionActionPerformed
         // TODO add your handling code here:
+        getSala(BoxSala.getSelectedItem().toString());
+        getPelicula(BoxPelicula.getSelectedItem().toString());
+        getDia(BoxHorario.getSelectedItem().toString());
+        getHora(BoxHora.getSelectedItem().toString());
+        insertarPelicula(ptrSala, salaBox, horaBox, movieBox, Integer.parseInt(horaBox));
+        mostrarMultilistaPelicula(ptrSala);
     }//GEN-LAST:event_buttonGestionActionPerformed
 
     /**
@@ -1662,6 +1826,7 @@ public class Administrador extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox<String> BoxHora;
     private javax.swing.JComboBox<String> BoxHorario;
     private javax.swing.JComboBox<String> BoxPelicula;
     private javax.swing.JComboBox<String> BoxSala;
@@ -1697,7 +1862,6 @@ public class Administrador extends javax.swing.JFrame {
     private javax.swing.JButton jButton7;
     private javax.swing.JButton jButton8;
     private javax.swing.JButton jButton9;
-    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JComboBox<String> jComboBox3;
     private javax.swing.JComboBox<String> jComboBox4;
     private javax.swing.JComboBox<String> jComboBox5;
