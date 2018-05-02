@@ -44,7 +44,7 @@ public class Administrador extends javax.swing.JFrame {
    File archivoPelicula;
    File salaMovie1;
    File salaMovie2;
-   sala ptrSala;
+   static sala ptrSala;
     /**
      * Creates new form Administrador
      */
@@ -258,6 +258,11 @@ public class Administrador extends javax.swing.JFrame {
    
    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //Gestion Salas de Cine/////
+
+    public static sala getPtrSala() {
+        return ptrSala;
+    }
+    
     
     public void getPelicula(String archivo){
         try{
@@ -283,11 +288,6 @@ public class Administrador extends javax.swing.JFrame {
         sala LinkSala;
         pelicula linkPeli;
     }
-    /*class diaSemana{
-        String dia;
-        diaSemana linkDay;
-        pelicula link2Pelicula;
-    }*/
     class pelicula{
         String peliculaNombre;
         String diaPelicula;
@@ -316,30 +316,36 @@ public class Administrador extends javax.swing.JFrame {
         }
         if(!p.nombre.equalsIgnoreCase(nombreSala) && p.LinkSala==null){
             p=null;
-        }
-        
+        }     
     }
-    /*public void buscarDiaSemana(sala ptr, String nombreSala, String dia, sala p, sala antp, diaSemana q, diaSemana antq){
-        System.out.println("Entro a buscar dia de semana");
-        buscarSala(ptr,nombreSala,p,antp);
+    
+    public void buscarPelicula(sala ptr, String sala, String nombrePelicula, String dia, int hora, pelicula q, pelicula antq, sala p , sala antp){
+        buscarSala(ptr, sala, p, antp);
         if(p==null){
-            System.out.println("¡La sala no existe!");
+            System.out.println("La sala  no existe");
         }else{
             antq=null;
-            q=p.linkdDaySala;
+            q=p.linkPeli;
             if(q!=null){
-                while(q.dia!=dia && q.linkDay!=null){
-                    antq=q;
-                    q=q.linkDay;
+                boolean loEncontro=false;
+                while(loEncontro==false && q.linkPelicula!=null){
+                    if(q.peliculaNombre.equals(nombrePelicula) && q.diaPelicula.equalsIgnoreCase(dia) && q.horaPelicula==hora){
+                        loEncontro=true;
+                        System.out.println("Encontró la pelicula");
+                    }else{
+                        antq=q;
+                        q=q.linkPelicula;
+                    }
                 }
-                if(q.dia.equals(dia)&& q.linkDay==null){
+                if(!q.peliculaNombre.equalsIgnoreCase(nombrePelicula) && q.linkPelicula==null){
                     q=null;
                 }
             }else{
-                System.out.println("No hay jugadores en el equipo");
+                JOptionPane.showMessageDialog(null, "No hay peliculas asignadas a esta funcion");
             }
         }
-    }*/
+    }
+    
     sala insertarSala(sala ptr, String nombre){
          sala p = new sala();
          p.nombre=nombre;
@@ -353,25 +359,6 @@ public class Administrador extends javax.swing.JFrame {
         q.LinkSala=p;
         return ptr;
     }
-    
-    /*sala insertarDia(sala ptr, String nombreSala, String dia){
-        sala p = ptr;
-        while(p!=null&& !p.nombre.equals(nombreSala)){
-            p=p.LinkSala;
-        }
-        diaSemana q= p.linkdDaySala;
-        diaSemana r = new diaSemana();
-        r.dia=dia;
-        if(q==null){
-            p.linkdDaySala=r;
-        }else{
-            while(q.linkDay!=null){
-                q=q.linkDay;
-            }
-            q.linkDay=r;
-        }
-        return ptr;
-    }*/
     
        void insertarPelicula(sala ptr, String Sala, String dia, String nombrePelicula, int hora){
            sala p = ptr;
@@ -398,34 +385,21 @@ public class Administrador extends javax.swing.JFrame {
            }
            
        }
-    /*sala insetarPelicula(sala ptr, String Sala, String dia, String nombrePelicula, int hora){
-        sala p= ptr;
-        while(p!=null && !p.nombre.equals(Sala)){
-            p=p.LinkSala;
-        }
-        diaSemana q= p.linkdDaySala;
-        while(q!=null && !q.dia.equals(dia)){
-            q=q.linkDay;
-        }
-        pelicula r = q.link2Pelicula;
-        pelicula k = new pelicula();
-        k.peliculaNombre=nombrePelicula;
-        k.horaPelicula=hora;
-        if(r==null){
-            q.link2Pelicula=k;
-        }else{
-            while(r.linkPelicula!=null){
-                if(hora!=r.horaPelicula){
-                r=r.linkPelicula;
-                }else{
-                    JOptionPane.showMessageDialog(null, "El horario de la pelicula ya existe, no puede adicionar la misma hora");
-                    return ptr;
-                }
-            }
-            r.linkPelicula=k;
-        }
-        return ptr;
-    }*/
+   
+       public void EliminarFuncionPelicula(sala ptr, String nombrePelicula, String sala, String dia, int hora){
+           System.out.println("Entro a eliminarFuncionPelicula");
+           pelicula q=null, antq=null;
+           sala p=null, antp=null;
+           buscarPelicula(ptr, sala, nombrePelicula, dia, hora, q, antq, p, antp);
+           if(q!=null){
+               if(p.linkPeli==q)
+               p.linkPeli=q.linkPelicula;
+               else
+                   antq.linkPelicula=q.linkPelicula;                    
+           }else{
+               JOptionPane.showMessageDialog(null, "Error al elimimnar pelicula");
+           }
+       }
     
     public void mostrarListaSala(sala ptr){
         DefaultListModel model = (DefaultListModel) listaAgregarFuncion.getModel();
@@ -534,6 +508,9 @@ public class Administrador extends javax.swing.JFrame {
         buttonGestion = new javax.swing.JButton();
         jScrollPane3 = new javax.swing.JScrollPane();
         listaAgregarFuncion = new javax.swing.JList<>();
+        jLabel31 = new javax.swing.JLabel();
+        jLabel32 = new javax.swing.JLabel();
+        eliminarFuncion = new javax.swing.JButton();
         boletas = new javax.swing.JFrame();
         jPanel5 = new javax.swing.JPanel();
         jButton9 = new javax.swing.JButton();
@@ -1117,6 +1094,17 @@ public class Administrador extends javax.swing.JFrame {
 
         jScrollPane3.setViewportView(listaAgregarFuncion);
 
+        jLabel31.setText("¿Deseas Eliminar una función?");
+
+        jLabel32.setText("Selecciona todos los campos en la parte de arriba ");
+
+        eliminarFuncion.setText("Eliminar Funcion");
+        eliminarFuncion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                eliminarFuncionActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout gestionFuncionesLayout = new javax.swing.GroupLayout(gestionFunciones.getContentPane());
         gestionFunciones.getContentPane().setLayout(gestionFuncionesLayout);
         gestionFuncionesLayout.setHorizontalGroup(
@@ -1144,10 +1132,18 @@ public class Administrador extends javax.swing.JFrame {
                                 .addComponent(BoxHora, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(gestionFuncionesLayout.createSequentialGroup()
                         .addGap(43, 43, 43)
-                        .addComponent(buttonGestion)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 97, Short.MAX_VALUE)
+                        .addGroup(gestionFuncionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel31)
+                            .addComponent(buttonGestion)))
+                    .addGroup(gestionFuncionesLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLabel32))
+                    .addGroup(gestionFuncionesLayout.createSequentialGroup()
+                        .addGap(43, 43, 43)
+                        .addComponent(eliminarFuncion, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 72, Short.MAX_VALUE)
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 296, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(135, Short.MAX_VALUE))
+                .addGap(107, 107, 107))
         );
         gestionFuncionesLayout.setVerticalGroup(
             gestionFuncionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1170,12 +1166,18 @@ public class Administrador extends javax.swing.JFrame {
                         .addGroup(gestionFuncionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel30)
                             .addComponent(BoxHora, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(26, 26, 26)
-                        .addComponent(buttonGestion))
+                        .addGap(18, 18, 18)
+                        .addComponent(buttonGestion)
+                        .addGap(57, 57, 57)
+                        .addComponent(jLabel31)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabel32)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(eliminarFuncion))
                     .addGroup(gestionFuncionesLayout.createSequentialGroup()
-                        .addGap(36, 36, 36)
+                        .addContainerGap()
                         .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 379, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(171, Short.MAX_VALUE))
+                .addContainerGap(196, Short.MAX_VALUE))
         );
 
         jButton9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/tu/film/imagenes/flecha_ant_.gif"))); // NOI18N
@@ -1757,10 +1759,28 @@ public class Administrador extends javax.swing.JFrame {
         insertarPelicula(ptrSala, sala1, dia1, peli1, Integer.parseInt(horaBox));
         mostrarMultilistaPelicula(ptrSala);
        }catch(Exception e){
-           System.out.println("Error al guardar la pelicula");
+           System.out.println("Error al guardar la pelicula"+e.getMessage());
        }
         
     }//GEN-LAST:event_buttonGestionActionPerformed
+
+    private void eliminarFuncionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_eliminarFuncionActionPerformed
+        // TODO add your handling code here:
+        getSala(BoxSala.getSelectedItem().toString());
+        getMovie(BoxPelicula.getSelectedItem().toString());
+        getDia(BoxHorario.getSelectedItem().toString());
+        getHora(BoxHora.getSelectedItem().toString());
+        String sala1= salaBox;
+        String peli1=movieBox;
+        int hora1 = Integer.parseInt(horaBox);
+        String dia1= diaBox;
+        try {
+             EliminarFuncionPelicula(ptrSala, peli1, sala1, dia1, hora1);
+             mostrarMultilistaPelicula(ptrSala);
+        } catch (Exception e) {
+            System.out.println("Error al eliminar la pelicula"+e.getMessage());
+        }
+    }//GEN-LAST:event_eliminarFuncionActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1815,6 +1835,7 @@ public class Administrador extends javax.swing.JFrame {
     private javax.swing.JTextField condicion;
     private javax.swing.JTextField duracion;
     private javax.swing.JButton eliminarButton;
+    private javax.swing.JButton eliminarFuncion;
     private javax.swing.JTextField estado;
     private javax.swing.JLabel estadoLabel;
     private javax.swing.JTextField estadoName;
@@ -1863,6 +1884,8 @@ public class Administrador extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel29;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel30;
+    private javax.swing.JLabel jLabel31;
+    private javax.swing.JLabel jLabel32;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
