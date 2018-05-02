@@ -194,6 +194,8 @@ public class LoginUsuario extends javax.swing.JFrame {
 
     private void noActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_noActionPerformed
         // TODO add your handling code here:
+        
+        
     }//GEN-LAST:event_noActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
