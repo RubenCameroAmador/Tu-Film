@@ -2,7 +2,6 @@
 1,Marvel
 2,DcComic
 3,Columbia
-5,Brazzer
 6,Disney
 9,xxxxx
 10,jjjjj
