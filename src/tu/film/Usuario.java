@@ -5,13 +5,17 @@
  */
 package tu.film;
 
+import java.awt.Image;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import tu.film.Administrador.sala;
 
 /**
  *
@@ -20,14 +24,26 @@ import javax.swing.table.DefaultTableModel;
 public class Usuario extends javax.swing.JFrame {
     registroUsuario ptr;
     File archivoUsuario;
+    File archivoPelicula;
     /**
      * Creates new form Usuario
      */
     public Usuario() {
         initComponents();
         ptr=null;
-        
+        mostrartablaPeliculas("archivoPelicula.txt");
+        escribir();
     }
+    void escribir(){
+    sala p = xd;
+    while(p!=null){
+        System.out.println(p.nombre);
+        p = p.LinkSala;
+    }
+    }
+    //Lo mas importante esta aqui. ¡never forget!
+    Administrador a = new Administrador();
+    sala xd = a.getPtrSala();
     class registroUsuario{
     registroUsuario link;
     String usuario;
@@ -57,6 +73,58 @@ public class Usuario extends javax.swing.JFrame {
         }
     }
 
+    /////////////////////////////////RESERVA DE ENTRADAS NO TARJETA////////////////////////////////////////////////////////////
+    public void mostrartablaPeliculas(String archivo){
+        try {
+            
+            DefaultTableModel model = (DefaultTableModel) mostrarPeliculas.getModel();
+            FileReader fr= new FileReader(archivo);
+            BufferedReader br= new BufferedReader(fr);
+            String linea;
+            linea = br.readLine();
+            String[] campos;
+            while(linea!= null){
+                campos= linea.split(",");
+                model.addRow(new Object[]{campos[2]});
+                linea = br.readLine();   
+            }
+            br.close();
+            fr.close();
+        } catch (Exception e) {
+        }
+    }
+    
+    public void mostrarInformacionPelicula(String archivo, String nombrePelicula){
+        try {
+            FileReader fr= new FileReader(archivo);
+            BufferedReader br= new BufferedReader(fr);
+            String linea;
+            linea = br.readLine();
+            String[] campos;
+            boolean entro = false;
+            while(linea!= null && entro==false){
+                campos= linea.split(",");
+                if(campos[2].equals(nombrePelicula)){
+                    entro= true;
+                    System.out.println(campos[10]);
+                    ImageIcon imagen1 = new ImageIcon(campos[10]);
+                    Icon icono= new ImageIcon(imagen1.getImage().getScaledInstance(imagenPelicula.getWidth(), imagenPelicula.getHeight(), Image.SCALE_DEFAULT));
+                    imagenPelicula.setIcon(icono);
+                    nombreMovie.setText(campos[2]);
+                    formatoPelicula.setText(campos[4]);
+                    generoPelicula.setText(campos[6]);
+                    duracionPelicula.setText(campos[8]);
+                }else{
+                  linea = br.readLine();    
+                }
+            }
+            br.close();
+            fr.close();
+        } catch (Exception e) {
+        }
+    }
+    
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -86,13 +154,26 @@ public class Usuario extends javax.swing.JFrame {
         jPasswordField1 = new javax.swing.JPasswordField();
         jButton5 = new javax.swing.JButton();
         jButton6 = new javax.swing.JButton();
-        MirarPeliculas = new javax.swing.JFrame();
+        MirarPeliculasNO = new javax.swing.JFrame();
         jPanel4 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        mostrarPeliculas = new javax.swing.JTable();
+        Informacion = new javax.swing.JButton();
+        imagenPelicula = new javax.swing.JLabel();
+        nombreMovie = new javax.swing.JLabel();
+        formatoPelicula = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        generoPelicula = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
+        duracionPelicula = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
+        jButton7 = new javax.swing.JButton();
 
         jPanel2.setBackground(new java.awt.Color(51, 204, 255));
         jPanel2.setBorder(javax.swing.BorderFactory.createMatteBorder(6, 6, 6, 6, new java.awt.Color(0, 0, 0)));
@@ -296,25 +377,116 @@ public class Usuario extends javax.swing.JFrame {
             .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
+        mostrarPeliculas.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Pelicula"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane1.setViewportView(mostrarPeliculas);
+        if (mostrarPeliculas.getColumnModel().getColumnCount() > 0) {
+            mostrarPeliculas.getColumnModel().getColumn(0).setResizable(false);
+        }
+
+        Informacion.setText("Mirar Informacion");
+        Informacion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                InformacionActionPerformed(evt);
+            }
+        });
+
+        imagenPelicula.setText("jLabel8");
+
+        nombreMovie.setText("jLabel8");
+
+        formatoPelicula.setText("jLabel8");
+
+        jLabel8.setText("Nombre Pelicula:");
+
+        jLabel9.setText("Formato Pelicula:");
+
+        jLabel10.setText("Genero de Pelicula:");
+
+        generoPelicula.setText("jLabel11");
+
+        jLabel11.setText("Duracion:");
+
+        duracionPelicula.setText("jLabel12");
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 588, Short.MAX_VALUE)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGap(62, 62, 62)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGap(197, 197, 197)
+                        .addComponent(Informacion))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGap(23, 23, 23)
+                        .addComponent(imagenPelicula, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(79, 79, 79)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(generoPelicula)
+                            .addComponent(nombreMovie, javax.swing.GroupLayout.PREFERRED_SIZE, 288, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel9)
+                            .addComponent(formatoPelicula, javax.swing.GroupLayout.PREFERRED_SIZE, 264, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel11)
+                            .addComponent(duracionPelicula))))
+                .addContainerGap(59, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 541, Short.MAX_VALUE)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addGap(31, 31, 31)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(Informacion)
+                .addGap(39, 39, 39)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addComponent(jLabel8)
+                        .addGap(7, 7, 7)
+                        .addComponent(nombreMovie)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabel9)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(formatoPelicula)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel10)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(generoPelicula)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel11)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(duracionPelicula))
+                    .addComponent(imagenPelicula, javax.swing.GroupLayout.PREFERRED_SIZE, 262, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(85, Short.MAX_VALUE))
         );
 
-        javax.swing.GroupLayout MirarPeliculasLayout = new javax.swing.GroupLayout(MirarPeliculas.getContentPane());
-        MirarPeliculas.getContentPane().setLayout(MirarPeliculasLayout);
-        MirarPeliculasLayout.setHorizontalGroup(
-            MirarPeliculasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout MirarPeliculasNOLayout = new javax.swing.GroupLayout(MirarPeliculasNO.getContentPane());
+        MirarPeliculasNO.getContentPane().setLayout(MirarPeliculasNOLayout);
+        MirarPeliculasNOLayout.setHorizontalGroup(
+            MirarPeliculasNOLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
-        MirarPeliculasLayout.setVerticalGroup(
-            MirarPeliculasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        MirarPeliculasNOLayout.setVerticalGroup(
+            MirarPeliculasNOLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
@@ -376,6 +548,13 @@ public class Usuario extends javax.swing.JFrame {
             }
         });
 
+        jButton7.setText("jButton7");
+        jButton7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton7ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -388,13 +567,14 @@ public class Usuario extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap(54, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap())
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addGap(53, 53, 53))))
+                .addComponent(jLabel1)
+                .addGap(53, 53, 53))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGap(36, 36, 36)
+                .addComponent(jButton7)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -404,8 +584,10 @@ public class Usuario extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 11, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButton3, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jButton7, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addGap(25, 25, 25))
         );
 
@@ -580,6 +762,17 @@ public class Usuario extends javax.swing.JFrame {
         Ingresar.setVisible(false);
     }//GEN-LAST:event_jButton6ActionPerformed
 
+    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+        // TODO add your handling code here:
+        MirarPeliculasNO.setVisible(true);
+    }//GEN-LAST:event_jButton7ActionPerformed
+
+    private void InformacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_InformacionActionPerformed
+        // TODO add your handling code here:
+       String nombrePelicula= (String) mostrarPeliculas.getModel().getValueAt(mostrarPeliculas.getSelectedRow(), 0);
+       mostrarInformacionPelicula("archivoPelicula.txt",nombrePelicula);
+    }//GEN-LAST:event_InformacionActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -616,11 +809,16 @@ public class Usuario extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton Informacion;
     private javax.swing.JFrame Ingresar;
-    private javax.swing.JFrame MirarPeliculas;
+    private javax.swing.JFrame MirarPeliculasNO;
     private javax.swing.JFrame Registrarse;
     private javax.swing.JTextField codigo;
     private javax.swing.JPasswordField contraseña;
+    private javax.swing.JLabel duracionPelicula;
+    private javax.swing.JLabel formatoPelicula;
+    private javax.swing.JLabel generoPelicula;
+    private javax.swing.JLabel imagenPelicula;
     private javax.swing.JButton ingresarButton;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
@@ -628,20 +826,28 @@ public class Usuario extends javax.swing.JFrame {
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
+    private javax.swing.JButton jButton7;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPasswordField jPasswordField1;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField jTextField1;
+    private javax.swing.JTable mostrarPeliculas;
     private javax.swing.JTextField nombre;
+    private javax.swing.JLabel nombreMovie;
     private javax.swing.JPasswordField validacion;
     // End of variables declaration//GEN-END:variables
 }

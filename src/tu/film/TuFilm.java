@@ -76,7 +76,7 @@ public class TuFilm {
         a.setVisible(true);
         a.setBounds(500, 300,900, 425);
         
- 
+       
     }
     
 }

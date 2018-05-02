@@ -42,9 +42,7 @@ public class Administrador extends javax.swing.JFrame {
    File archivoEstado;
    File archivoTipoPeli;
    File archivoPelicula;
-   File salaMovie1;
-   File salaMovie2;
-   static sala ptrSala;
+   public static sala ptrSala;
     /**
      * Creates new form Administrador
      */
@@ -77,8 +75,6 @@ public class Administrador extends javax.swing.JFrame {
         
         //Gestion Salas
         ptrSala=null;
-        salaMovie1= new File("./salaMovie1.txt");
-        salaMovie2= new File("./salaMovie2.txt");
         getPelicula("archivoPelicula.txt");
         listaAgregarFuncion.setModel(new DefaultListModel());
         ptrSala = insertarSala( ptrSala, "Sala 1");
