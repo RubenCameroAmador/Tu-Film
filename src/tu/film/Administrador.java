@@ -42,6 +42,8 @@ public class Administrador extends javax.swing.JFrame {
    File archivoEstado;
    File archivoTipoPeli;
    File archivoPelicula;
+   File salaMovie1;
+   File salaMovie2;
    sala ptrSala;
     /**
      * Creates new form Administrador
@@ -55,7 +57,8 @@ public class Administrador extends javax.swing.JFrame {
         archivoProovedor = new File("./archivoProovedor.txt");
         archivoEstado = new File("./archivoEstado.txt");
         archivoTipoPeli = new File("./archivoTipoPeli.txt");
-     
+        
+        
         DefaultListModel model = new DefaultListModel();
         proovedorList.setModel(model);
         extraerArchivo("archivoProovedor.txt",proovedor);
@@ -74,25 +77,13 @@ public class Administrador extends javax.swing.JFrame {
         
         //Gestion Salas
         ptrSala=null;
+        salaMovie1= new File("./salaMovie1.txt");
+        salaMovie2= new File("./salaMovie2.txt");
         getPelicula("archivoPelicula.txt");
         listaAgregarFuncion.setModel(new DefaultListModel());
         ptrSala = insertarSala( ptrSala, "Sala 1");
         ptrSala = insertarSala( ptrSala, "Sala 2");
-        ptrSala = insertarDia( ptrSala, "Sala 1", "Lunes");
-        ptrSala = insertarDia( ptrSala, "Sala 1", "Martes");
-        ptrSala = insertarDia( ptrSala, "Sala 1", "Miercoles");
-        ptrSala = insertarDia( ptrSala, "Sala 1", "Jueves");
-        ptrSala = insertarDia( ptrSala, "Sala 1", "Viernes");
-        ptrSala = insertarDia( ptrSala, "Sala 1", "Sabado");
-        ptrSala = insertarDia( ptrSala, "Sala 1", "Domingo");
-        ptrSala = insertarDia( ptrSala, "Sala 2", "Lunes");
-        ptrSala = insertarDia( ptrSala, "Sala 2", "Martes");
-        ptrSala = insertarDia( ptrSala, "Sala 2", "Miercoles");
-        ptrSala = insertarDia( ptrSala, "Sala 2", "Jueves");
-        ptrSala = insertarDia( ptrSala, "Sala 2", "Viernes");
-        ptrSala = insertarDia( ptrSala, "Sala 2", "Sabado");
-        ptrSala = insertarDia( ptrSala, "Sala 2", "Domingo");
-        mostrarMultilista(ptrSala);
+        mostrarListaSala(ptrSala);
     }
     class Estado{
         Estado linkEstado;
@@ -290,13 +281,13 @@ public class Administrador extends javax.swing.JFrame {
     class sala{
         String nombre;
         sala LinkSala;
-        diaSemana linkdDaySala;
+        pelicula linkPeli;
     }
-    class diaSemana{
+    /*class diaSemana{
         String dia;
         diaSemana linkDay;
         pelicula link2Pelicula;
-    }
+    }*/
     class pelicula{
         String peliculaNombre;
         String diaPelicula;
@@ -328,7 +319,7 @@ public class Administrador extends javax.swing.JFrame {
         }
         
     }
-    public void buscarDiaSemana(sala ptr, String nombreSala, String dia, sala p, sala antp, diaSemana q, diaSemana antq){
+    /*public void buscarDiaSemana(sala ptr, String nombreSala, String dia, sala p, sala antp, diaSemana q, diaSemana antq){
         System.out.println("Entro a buscar dia de semana");
         buscarSala(ptr,nombreSala,p,antp);
         if(p==null){
@@ -348,9 +339,7 @@ public class Administrador extends javax.swing.JFrame {
                 System.out.println("No hay jugadores en el equipo");
             }
         }
-        
-    
-    }
+    }*/
     sala insertarSala(sala ptr, String nombre){
          sala p = new sala();
          p.nombre=nombre;
@@ -365,7 +354,7 @@ public class Administrador extends javax.swing.JFrame {
         return ptr;
     }
     
-    sala insertarDia(sala ptr, String nombreSala, String dia){
+    /*sala insertarDia(sala ptr, String nombreSala, String dia){
         sala p = ptr;
         while(p!=null&& !p.nombre.equals(nombreSala)){
             p=p.LinkSala;
@@ -382,49 +371,32 @@ public class Administrador extends javax.swing.JFrame {
             q.linkDay=r;
         }
         return ptr;
-    }
+    }*/
     
        void insertarPelicula(sala ptr, String Sala, String dia, String nombrePelicula, int hora){
-           sala p=null;
-           sala antp=null;
-           diaSemana q=null;
-           diaSemana antq=null;
-           buscarDiaSemana(ptr, Sala, dia, p, antp, q, antq);
-           if(q!=null){
-                 pelicula r= new pelicula();
-               if(q.linkDay==null){
-                   r.peliculaNombre=nombrePelicula;
-                   r.horaPelicula=hora;
-                   q.link2Pelicula=r;
-                   r.linkPelicula=null;
+           sala p = ptr;
+           while(p!=null && !p.nombre.equalsIgnoreCase(Sala)){
+               p=p.LinkSala;
+           }
+           pelicula q= p.linkPeli;
+           pelicula r = new pelicula();
+           r.diaPelicula=dia;
+           r.horaPelicula=hora;
+           r.peliculaNombre=nombrePelicula;
+           boolean ingreso = false;
+           if(q==null){
+               p.linkPeli=r;
+           }else{
+               while(q.linkPelicula!=null && ingreso==false){
+                       q=q.linkPelicula;
+               }
+               if(q.diaPelicula.equalsIgnoreCase(dia) && q.horaPelicula==hora){
+                   JOptionPane.showMessageDialog(null, "Ya existe una pelicula con estas especificaciones");
                }else{
-                   pelicula antr=null;
-                   r=q.link2Pelicula;
-                   while(r.horaPelicula<hora && r.linkPelicula!=null){
-                       antr=r;
-                       r=r.linkPelicula;
-                   }
-                   if(r.horaPelicula==hora){
-                       JOptionPane.showMessageDialog(null, "¡YA EXISTE UNA PELICULA AGREGADA A ESTA HORA!");
-                   }else{
-                       pelicula k = new pelicula();
-                       k.peliculaNombre=nombrePelicula;
-                       k.horaPelicula=hora;
-                       if(k.horaPelicula>hora){
-                           if(antr==null){
-                               q.link2Pelicula=k;
-                               k.linkPelicula=r;
-                           }else{
-                               antr.linkPelicula=k;
-                               k.linkPelicula=r;
-                           }
-                       }else{
-                           r.linkPelicula=k;
-                           k.linkPelicula=null;
-                       }
-                   }
+               q.linkPelicula=r;
                }
            }
+           
        }
     /*sala insetarPelicula(sala ptr, String Sala, String dia, String nombrePelicula, int hora){
         sala p= ptr;
@@ -455,17 +427,12 @@ public class Administrador extends javax.swing.JFrame {
         return ptr;
     }*/
     
-    public void mostrarMultilista(sala ptr){
+    public void mostrarListaSala(sala ptr){
         DefaultListModel model = (DefaultListModel) listaAgregarFuncion.getModel();
         model.clear();
         sala p = ptr;
         while( p!=null ){
             model.addElement(p.nombre);
-            diaSemana r = p.linkdDaySala;
-            while(r!=null){
-                model.addElement("==>"+r.dia);
-                r=r.linkDay;
-            }
             p = p.LinkSala;
         }
     }
@@ -473,19 +440,14 @@ public class Administrador extends javax.swing.JFrame {
         DefaultListModel model = (DefaultListModel) listaAgregarFuncion.getModel();
         model.clear();
         sala p = ptr;
-        while(p!=null){
+        while( p!=null ){
             model.addElement(p.nombre);
-            diaSemana r = p.linkdDaySala;
-            while(r!=null){
-                model.addElement("==>"+r.dia);
-                pelicula a = r.link2Pelicula;
-                while(a!=null){
-                    model.addElement("===>"+a.peliculaNombre+a.diaPelicula);
-                    a=a.linkPelicula;
-                }
-                r=r.linkDay;
+            pelicula q = p.linkPeli;
+            while(q!=null){
+                model.addElement(q.peliculaNombre+","+q.diaPelicula+","+q.horaPelicula);
+                q=q.linkPelicula;
             }
-            p=p.LinkSala;
+            p = p.LinkSala;
         }
     }
     
@@ -1783,11 +1745,21 @@ public class Administrador extends javax.swing.JFrame {
     private void buttonGestionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonGestionActionPerformed
         // TODO add your handling code here:
         getSala(BoxSala.getSelectedItem().toString());
-        getPelicula(BoxPelicula.getSelectedItem().toString());
+        getMovie(BoxPelicula.getSelectedItem().toString());
         getDia(BoxHorario.getSelectedItem().toString());
         getHora(BoxHora.getSelectedItem().toString());
-        insertarPelicula(ptrSala, salaBox, horaBox, movieBox, Integer.parseInt(horaBox));
+        String sala1= salaBox;
+        String peli1=movieBox;
+        int hora1 = Integer.parseInt(horaBox);
+        String dia1= diaBox;
+      
+       try{
+        insertarPelicula(ptrSala, sala1, dia1, peli1, Integer.parseInt(horaBox));
         mostrarMultilistaPelicula(ptrSala);
+       }catch(Exception e){
+           System.out.println("Error al guardar la pelicula");
+       }
+        
     }//GEN-LAST:event_buttonGestionActionPerformed
 
     /**
