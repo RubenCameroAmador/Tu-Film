@@ -24,35 +24,7 @@ public class Entrada extends javax.swing.JFrame {
      * Creates new form Entrada
      */
     public Entrada() {
-        initComponents();
-        Timer tiempo= new Timer(100, new Entrada.horas());
-        tiempo.start();
-        fecha.setText(fecha());
-    }
-    
-    public static String fecha(){
-        /*Date fecha=  new Date();
-        SimpleDateFormat formato =  new SimpleDateFormat("dd-mm-aaaa");
-        return formato.format(fecha);*/
-        int day, month, year;
-        GregorianCalendar date = new GregorianCalendar();
- 
-      day = date.get(Calendar.DAY_OF_MONTH);
-      month = date.get(Calendar.MONTH);
-      year = date.get(Calendar.YEAR);
-      return ""+day+"/"+(month+1)+"/"+year;
-    }
-    
-    
-    class horas implements ActionListener{
-        
-        public void actionPerformed(ActionEvent e){
-            Date sistHora = new Date();
-            String pmAm="hh:mm:ss a";
-            SimpleDateFormat format = new SimpleDateFormat(pmAm);
-            Calendar hoy= Calendar.getInstance();
-            hora.setText(String.format(format.format(sistHora),hoy));
-        }
+        initComponents();   
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -73,15 +45,6 @@ public class Entrada extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         jMenuItem2 = new javax.swing.JMenuItem();
-        ingresoUsuario = new javax.swing.JFrame();
-        jPanel2 = new javax.swing.JPanel();
-        hora = new javax.swing.JLabel();
-        fecha = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        si = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jLabel6 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
         jLabel3 = new javax.swing.JLabel();
         administrador = new javax.swing.JMenuBar();
@@ -192,71 +155,6 @@ public class Entrada extends javax.swing.JFrame {
 
         jMenuItem2.setText("jMenuItem2");
 
-        ingresoUsuario.getContentPane().setLayout(null);
-
-        jPanel2.setLayout(null);
-
-        hora.setFont(new java.awt.Font("Segoe Print", 3, 32)); // NOI18N
-        hora.setText("Hora");
-        jPanel2.add(hora);
-        hora.setBounds(240, 30, 320, 58);
-
-        fecha.setFont(new java.awt.Font("Segoe Print", 3, 32)); // NOI18N
-        fecha.setText("Fecha");
-        jPanel2.add(fecha);
-        fecha.setBounds(250, 80, 330, 58);
-
-        jLabel5.setFont(new java.awt.Font("Segoe Print", 3, 27)); // NOI18N
-        jLabel5.setText("¿Tiene o desea obtener una cuenta en Tu-Film?");
-        jPanel2.add(jLabel5);
-        jLabel5.setBounds(20, 210, 695, 78);
-
-        si.setFont(new java.awt.Font("Segoe Print", 3, 16)); // NOI18N
-        si.setIcon(new javax.swing.ImageIcon(getClass().getResource("/tu/film/imagenes/si_.jpg"))); // NOI18N
-        si.setText("YES");
-        si.setBorder(null);
-        si.setBorderPainted(false);
-        si.setContentAreaFilled(false);
-        si.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        si.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        si.setIconTextGap(-3);
-        si.setInheritsPopupMenu(true);
-        si.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
-        si.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        si.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                siActionPerformed(evt);
-            }
-        });
-        jPanel2.add(si);
-        si.setBounds(210, 297, 111, 120);
-
-        jButton3.setFont(new java.awt.Font("Segoe Print", 3, 16)); // NOI18N
-        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/tu/film/imagenes/no_.jpg"))); // NOI18N
-        jButton3.setText("NO");
-        jButton3.setBorder(null);
-        jButton3.setBorderPainted(false);
-        jButton3.setContentAreaFilled(false);
-        jButton3.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jButton3.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton3.setIconTextGap(-3);
-        jButton3.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
-        jButton3.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jPanel2.add(jButton3);
-        jButton3.setBounds(390, 290, 109, 120);
-
-        jLabel6.setFont(new java.awt.Font("Segoe Print", 3, 36)); // NOI18N
-        jLabel6.setText("              ¡BIENBENIDOS!");
-        jPanel2.add(jLabel6);
-        jLabel6.setBounds(10, 150, 700, 65);
-
-        jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/tu/film/imagenes/fondo_.jpg"))); // NOI18N
-        jPanel2.add(jLabel7);
-        jLabel7.setBounds(0, 0, 820, 600);
-
-        ingresoUsuario.getContentPane().add(jPanel2);
-        jPanel2.setBounds(0, 0, 698, 434);
-
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/tu/film/imagenes/tu_film_.jpg"))); // NOI18N
@@ -324,10 +222,10 @@ public class Entrada extends javax.swing.JFrame {
 
     private void usuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_usuarioActionPerformed
         // TODO add your handling code here:
-   
-        ingresoUsuario.setVisible(true);
-        ingresoUsuario.setLocationRelativeTo(null);
-        ingresoUsuario.setBounds(570, 280, 710, 490);
+           LoginUsuario l= new LoginUsuario();
+        l.setVisible(true);
+        l.setLocationRelativeTo(null);
+        l.setBounds(570, 280, 710, 490);
        this.setVisible(false);
     }//GEN-LAST:event_usuarioActionPerformed
 
@@ -348,15 +246,6 @@ public class Entrada extends javax.swing.JFrame {
         e.setBounds(500, 300,900, 425);
       
     }//GEN-LAST:event_jButton1ActionPerformed
-
-    private void siActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_siActionPerformed
-        // TODO add your handling code here:
-        Usuario s= new Usuario();
-        s.setVisible(true);
-        s.setBounds(620, 300, 460, 480);
-        ingresoUsuario.setVisible(false);
-        
-    }//GEN-LAST:event_siActionPerformed
 
     /**
      * @param args the command line arguments
@@ -397,27 +286,18 @@ public class Entrada extends javax.swing.JFrame {
     private javax.swing.JMenuItem admin;
     private javax.swing.JMenuBar administrador;
     private javax.swing.JFrame administradorLogin;
-    private javax.swing.JLabel fecha;
-    private javax.swing.JLabel hora;
-    private javax.swing.JFrame ingresoUsuario;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JButton login;
     private javax.swing.JTextField nombreUsuario;
     private javax.swing.JPasswordField password;
-    private javax.swing.JButton si;
     private javax.swing.JMenuItem usuario;
     // End of variables declaration//GEN-END:variables
 }

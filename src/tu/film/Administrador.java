@@ -90,7 +90,7 @@ public class Administrador extends javax.swing.JFrame {
     Nodo link;
     String Proovedor;
     String numero;
-}
+    }
     
     public Nodo crearLista(Nodo ptr, String nombreProovedor, String num){
         Nodo p = new Nodo();
@@ -132,8 +132,7 @@ public class Administrador extends javax.swing.JFrame {
         model.clear();
         tipoPeli p = ptr;
         while( p!=null ){
-            model.addElement(p.numTipo+","+p.tipo);
-            
+            model.addElement(p.numTipo+","+p.tipo); 
             p = p.linkT;
         }
     }
@@ -1470,7 +1469,7 @@ public class Administrador extends javax.swing.JFrame {
         Listas.setBounds(700, 300, 500, 400);
         this.setVisible(false);
     }//GEN-LAST:event_jButton4ActionPerformed
-
+ 
     private void proovedorSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_proovedorSaveActionPerformed
         // TODO add your handling code here:
      String provedor = proovedorname.getText();
@@ -1479,7 +1478,7 @@ public class Administrador extends javax.swing.JFrame {
      ptr= crearLista(ptr, provedor, numero);
      mostrarLista(ptr);
      agregarArchivo(ptr,archivoProovedor);
-     
+        System.out.println("HOLIIIIIII"); 
     }//GEN-LAST:event_proovedorSaveActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
