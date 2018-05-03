@@ -23,6 +23,7 @@ public class LoginUsuario extends javax.swing.JFrame {
     /**
      * Creates new form LoginUsuario
      */
+    public static boolean abierta= false;
     public LoginUsuario() {
         initComponents();
         Timer tiempo= new Timer(100, new LoginUsuario.horas());
@@ -194,6 +195,10 @@ public class LoginUsuario extends javax.swing.JFrame {
 
     private void noActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_noActionPerformed
         // TODO add your handling code here:
+        Usuario u = new Usuario();
+         abierta=true;
+        u.setVisible(true);
+        abierta=true;
         
         
     }//GEN-LAST:event_noActionPerformed

@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import javax.swing.DefaultListModel;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -506,6 +507,7 @@ public class Administrador extends javax.swing.JFrame {
         jLabel31 = new javax.swing.JLabel();
         jLabel32 = new javax.swing.JLabel();
         eliminarFuncion = new javax.swing.JButton();
+        atras = new javax.swing.JButton();
         boletas = new javax.swing.JFrame();
         jPanel5 = new javax.swing.JPanel();
         jButton9 = new javax.swing.JButton();
@@ -1100,6 +1102,13 @@ public class Administrador extends javax.swing.JFrame {
             }
         });
 
+        atras.setText("atras");
+        atras.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                atrasActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout gestionFuncionesLayout = new javax.swing.GroupLayout(gestionFunciones.getContentPane());
         gestionFunciones.getContentPane().setLayout(gestionFuncionesLayout);
         gestionFuncionesLayout.setHorizontalGroup(
@@ -1135,7 +1144,10 @@ public class Administrador extends javax.swing.JFrame {
                         .addComponent(jLabel32))
                     .addGroup(gestionFuncionesLayout.createSequentialGroup()
                         .addGap(43, 43, 43)
-                        .addComponent(eliminarFuncion, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(eliminarFuncion, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(gestionFuncionesLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(atras)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 72, Short.MAX_VALUE)
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 296, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(107, 107, 107))
@@ -1143,9 +1155,11 @@ public class Administrador extends javax.swing.JFrame {
         gestionFuncionesLayout.setVerticalGroup(
             gestionFuncionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(gestionFuncionesLayout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(gestionFuncionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(gestionFuncionesLayout.createSequentialGroup()
-                        .addGap(47, 47, 47)
+                        .addComponent(atras)
+                        .addGap(13, 13, 13)
                         .addGroup(gestionFuncionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel27)
                             .addComponent(BoxSala, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -1169,9 +1183,7 @@ public class Administrador extends javax.swing.JFrame {
                         .addComponent(jLabel32)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(eliminarFuncion))
-                    .addGroup(gestionFuncionesLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 379, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 379, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(196, Short.MAX_VALUE))
         );
 
@@ -1549,13 +1561,13 @@ public class Administrador extends javax.swing.JFrame {
             
         archivoPelicula = new File("./archivoPelicula.txt");
         DefaultTableModel model2 = (DefaultTableModel) Peliculas.getModel();
-        /*try {
+        try {
             PrintWriter writer = new PrintWriter(archivoPelicula);
             writer.print("");
             writer.close();
         } catch (Exception e) {
             System.out.println("Error Limpiar archivo: " + e.getMessage());
-        }*/
+        }
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(archivoPelicula, true))) {
             int filas = Peliculas.getRowCount();
             for (int i = 0; i < filas; i++) {
@@ -1596,7 +1608,6 @@ public class Administrador extends javax.swing.JFrame {
      ptr= crearLista(ptr, provedor, numero);
      mostrarLista(ptr);
      agregarArchivo(ptr,archivoProovedor);
-        System.out.println("HOLIIIIIII"); 
     }//GEN-LAST:event_proovedorSaveActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -1615,6 +1626,10 @@ public class Administrador extends javax.swing.JFrame {
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         // TODO add your handling code here:
+        Entrada a= new Entrada();
+        a.setVisible(true);
+        a.setBounds(500, 300,900, 425);
+        this.setVisible(false);
     
     }//GEN-LAST:event_jButton5ActionPerformed
 
@@ -1777,6 +1792,15 @@ public class Administrador extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_eliminarFuncionActionPerformed
 
+    private void atrasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_atrasActionPerformed
+        // TODO add your handling code here:
+            Administrador a = new Administrador();
+            a.setVisible(true);
+            a.setLocationRelativeTo(null);
+            a.setBounds(570, 300, 560, 530);
+            gestionFunciones.setVisible(false);
+    }//GEN-LAST:event_atrasActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -1822,6 +1846,7 @@ public class Administrador extends javax.swing.JFrame {
     private javax.swing.JTable Peliculas;
     private javax.swing.JTextField abreviatura;
     private javax.swing.JButton agregar;
+    private javax.swing.JButton atras;
     private javax.swing.JFrame boletas;
     private javax.swing.JFileChooser buscar;
     private javax.swing.JButton buttonGestion;

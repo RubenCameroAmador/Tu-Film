@@ -11,61 +11,73 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
+import javax.swing.DefaultListModel;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import tu.film.Administrador.pelicula;
 import tu.film.Administrador.sala;
 
 /**
  *
- * @author Adriana Arango
+ * @author Adriana Arango y Ruben Camero
  */
 public class Usuario extends javax.swing.JFrame {
+
     registroUsuario ptr;
     File archivoUsuario;
     File archivoPelicula;
+    File Registro;
+
     /**
      * Creates new form Usuario
      */
     public Usuario() {
         initComponents();
-        ptr=null;
+        ptr = null;
         mostrartablaPeliculas("archivoPelicula.txt");
-        escribir();
+        Registro = new File("./registro.txt");
+        //escribir();
+
     }
-    void escribir(){
-    sala p = xd;
+    /*void escribir(){
+    sala p = ptrSala;
     while(p!=null){
         System.out.println(p.nombre);
         p = p.LinkSala;
     }
-    }
+    }*/
+
     //Lo mas importante esta aqui. ¡never forget!
     Administrador a = new Administrador();
-    sala xd = a.getPtrSala();
-    class registroUsuario{
-    registroUsuario link;
-    String usuario;
-    String contraseña;
-    String numeroTarjeta;
+    sala ptrSala = a.getPtrSala();
+
+    class registroUsuario {
+
+        registroUsuario link;
+        String usuario;
+        String contraseña;
+        String numeroTarjeta;
     }
-    public registroUsuario crearLista(registroUsuario ptr, String contraseña, String usuario, String num){
+
+    public registroUsuario crearLista(registroUsuario ptr, String contraseña, String usuario, String num) {
         registroUsuario p = new registroUsuario();
-        p.numeroTarjeta= num;
-        p.usuario= usuario;
-        p.contraseña=contraseña;
-        p.link=ptr;
-        ptr=p;
+        p.numeroTarjeta = num;
+        p.usuario = usuario;
+        p.contraseña = contraseña;
+        p.link = ptr;
+        ptr = p;
         return ptr;
     }
-    public void agregarArchivo(registroUsuario ptr, File archivo){
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(archivo, true))){
-            registroUsuario p= ptr;
-            while(p!=null){
-                bw.write(p.numeroTarjeta+","+p.usuario+","+p.contraseña);
+
+    public void agregarArchivo(registroUsuario ptr, File archivo) {
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(archivo, true))) {
+            registroUsuario p = ptr;
+            while (p != null) {
+                bw.write(p.numeroTarjeta + "," + p.usuario + "," + p.contraseña);
                 bw.newLine();
-                p=p.link;
+                p = p.link;
             }
             bw.close();
         } catch (Exception e) {
@@ -74,48 +86,48 @@ public class Usuario extends javax.swing.JFrame {
     }
 
     /////////////////////////////////RESERVA DE ENTRADAS NO TARJETA////////////////////////////////////////////////////////////
-    public void mostrartablaPeliculas(String archivo){
+    public void mostrartablaPeliculas(String archivo) {
         try {
-            
+
             DefaultTableModel model = (DefaultTableModel) mostrarPeliculas.getModel();
-            FileReader fr= new FileReader(archivo);
-            BufferedReader br= new BufferedReader(fr);
+            FileReader fr = new FileReader(archivo);
+            BufferedReader br = new BufferedReader(fr);
             String linea;
             linea = br.readLine();
             String[] campos;
-            while(linea!= null){
-                campos= linea.split(",");
+            while (linea != null) {
+                campos = linea.split(",");
                 model.addRow(new Object[]{campos[2]});
-                linea = br.readLine();   
+                linea = br.readLine();
             }
             br.close();
             fr.close();
         } catch (Exception e) {
         }
     }
-    
-    public void mostrarInformacionPelicula(String archivo, String nombrePelicula){
+
+    public void mostrarInformacionPelicula(String archivo, String nombrePelicula) {
         try {
-            FileReader fr= new FileReader(archivo);
-            BufferedReader br= new BufferedReader(fr);
+            FileReader fr = new FileReader(archivo);
+            BufferedReader br = new BufferedReader(fr);
             String linea;
             linea = br.readLine();
             String[] campos;
             boolean entro = false;
-            while(linea!= null && entro==false){
-                campos= linea.split(",");
-                if(campos[2].equals(nombrePelicula)){
-                    entro= true;
+            while (linea != null && entro == false) {
+                campos = linea.split(",");
+                if (campos[2].equals(nombrePelicula)) {
+                    entro = true;
                     System.out.println(campos[10]);
                     ImageIcon imagen1 = new ImageIcon(campos[10]);
-                    Icon icono= new ImageIcon(imagen1.getImage().getScaledInstance(imagenPelicula.getWidth(), imagenPelicula.getHeight(), Image.SCALE_DEFAULT));
+                    Icon icono = new ImageIcon(imagen1.getImage().getScaledInstance(imagenPelicula.getWidth(), imagenPelicula.getHeight(), Image.SCALE_DEFAULT));
                     imagenPelicula.setIcon(icono);
                     nombreMovie.setText(campos[2]);
                     formatoPelicula.setText(campos[4]);
                     generoPelicula.setText(campos[6]);
                     duracionPelicula.setText(campos[8]);
-                }else{
-                  linea = br.readLine();    
+                } else {
+                    linea = br.readLine();
                 }
             }
             br.close();
@@ -123,8 +135,23 @@ public class Usuario extends javax.swing.JFrame {
         } catch (Exception e) {
         }
     }
-    
-    
+
+    public void buscarInformacionPelicula(sala ptr, String nombrePelicula) {
+        DefaultListModel model = (DefaultListModel) mostrarPelicula.getModel();
+        model.clear();
+        sala p = ptr;
+        while (p != null) {
+            pelicula q = p.linkPeli;
+            while (q != null) {
+                if (q.peliculaNombre.equalsIgnoreCase(nombrePelicula)) {
+                    model.addElement("Dia: " + q.diaPelicula + " , " + "Hora: " + q.horaPelicula);
+                }
+                q = q.linkPelicula;
+            }
+            p = p.LinkSala;
+        }
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -149,9 +176,9 @@ public class Usuario extends javax.swing.JFrame {
         Ingresar = new javax.swing.JFrame();
         jPanel3 = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        nombreIngreso = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
-        jPasswordField1 = new javax.swing.JPasswordField();
+        password = new javax.swing.JPasswordField();
         jButton5 = new javax.swing.JButton();
         jButton6 = new javax.swing.JButton();
         MirarPeliculasNO = new javax.swing.JFrame();
@@ -168,6 +195,14 @@ public class Usuario extends javax.swing.JFrame {
         generoPelicula = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
         duracionPelicula = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        mostrarPelicula = new javax.swing.JList<>();
+        jLabel12 = new javax.swing.JLabel();
+        atras = new javax.swing.JButton();
+        reservar = new javax.swing.JButton();
+        registroFrame = new javax.swing.JFrame();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        registro = new javax.swing.JTable();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
@@ -227,15 +262,14 @@ public class Usuario extends javax.swing.JFrame {
                                 .addGap(9, 9, 9)
                                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 248, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(40, 40, 40))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 235, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGap(35, 35, 35))
-                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 269, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGap(27, 27, 27))))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 235, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(35, 35, 35))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 269, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(27, 27, 27)))
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(codigo)
                             .addComponent(validacion)
@@ -291,7 +325,7 @@ public class Usuario extends javax.swing.JFrame {
         jPanel3.setForeground(new java.awt.Color(51, 153, 255));
 
         jLabel6.setFont(new java.awt.Font("Lucida Sans Unicode", 2, 18)); // NOI18N
-        jLabel6.setText("Digite usuario o numero de trajeta Tu-Film:");
+        jLabel6.setText("Digite su nombre de Usuario");
 
         jLabel7.setFont(new java.awt.Font("Lucida Sans Unicode", 2, 18)); // NOI18N
         jLabel7.setText("Digite Contraseña:");
@@ -299,6 +333,11 @@ public class Usuario extends javax.swing.JFrame {
         jButton5.setFont(new java.awt.Font("Lucida Sans Unicode", 2, 16)); // NOI18N
         jButton5.setText("Ingresar");
         jButton5.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        jButton5.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton5MouseClicked(evt);
+            }
+        });
         jButton5.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton5ActionPerformed(evt);
@@ -327,26 +366,26 @@ public class Usuario extends javax.swing.JFrame {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jButton6))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(62, 62, 62)
-                        .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 394, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(0, 78, Short.MAX_VALUE))
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(131, 131, 131)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 251, Short.MAX_VALUE)
-                            .addComponent(jPasswordField1)))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGap(170, 170, 170)
                         .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGap(211, 211, 211)
-                        .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGap(131, 131, 131)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(nombreIngreso, javax.swing.GroupLayout.DEFAULT_SIZE, 251, Short.MAX_VALUE)
+                            .addComponent(password))))
+                .addContainerGap(152, Short.MAX_VALUE))
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jButton6))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGap(122, 122, 122)
+                        .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 272, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(0, 140, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -356,11 +395,11 @@ public class Usuario extends javax.swing.JFrame {
                 .addGap(24, 24, 24)
                 .addComponent(jLabel6)
                 .addGap(18, 18, 18)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(nombreIngreso, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(29, 29, 29)
                 .addComponent(jLabel7)
                 .addGap(18, 18, 18)
-                .addComponent(jPasswordField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(password, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(37, 37, 37)
                 .addComponent(jButton5)
                 .addContainerGap(37, Short.MAX_VALUE))
@@ -423,71 +462,159 @@ public class Usuario extends javax.swing.JFrame {
 
         duracionPelicula.setText("jLabel12");
 
+        mostrarPelicula.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        jScrollPane2.setViewportView(mostrarPelicula);
+
+        jLabel12.setText("Horarios de Pelicula: ");
+
+        atras.setText("atras");
+        atras.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                atrasActionPerformed(evt);
+            }
+        });
+
+        reservar.setText("Reservar Entrada");
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
+                .addGap(50, 50, 50)
+                .addComponent(imagenPelicula, javax.swing.GroupLayout.PREFERRED_SIZE, 276, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGap(62, 62, 62)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGap(197, 197, 197)
-                        .addComponent(Informacion))
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGap(23, 23, 23)
-                        .addComponent(imagenPelicula, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(79, 79, 79)
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(generoPelicula)
-                            .addComponent(nombreMovie, javax.swing.GroupLayout.PREFERRED_SIZE, 288, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel9)
-                            .addComponent(formatoPelicula, javax.swing.GroupLayout.PREFERRED_SIZE, 264, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel11)
-                            .addComponent(duracionPelicula))))
-                .addContainerGap(59, Short.MAX_VALUE))
+                    .addComponent(nombreMovie, javax.swing.GroupLayout.PREFERRED_SIZE, 288, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel9)
+                    .addComponent(formatoPelicula, javax.swing.GroupLayout.PREFERRED_SIZE, 264, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(generoPelicula)
+                    .addComponent(jLabel11)
+                    .addComponent(duracionPelicula))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addGap(18, 18, 18)
+                .addComponent(atras)
+                .addGap(69, 69, 69)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addGap(74, 74, 74)
+                .addComponent(jLabel12)
+                .addGap(42, 42, 42)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(195, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                        .addComponent(Informacion)
+                        .addGap(271, 271, 271))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                        .addComponent(reservar, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(268, 268, 268))))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(31, 31, 31)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap()
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(atras)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(Informacion)
-                .addGap(39, 39, 39)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addComponent(jLabel8)
-                        .addGap(7, 7, 7)
-                        .addComponent(nombreMovie)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel4Layout.createSequentialGroup()
+                                .addGap(51, 51, 51)
+                                .addComponent(jLabel8)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(nombreMovie)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jLabel9)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(formatoPelicula)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jLabel10)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(generoPelicula)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jLabel11)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(duracionPelicula))
+                            .addGroup(jPanel4Layout.createSequentialGroup()
+                                .addGap(18, 18, 18)
+                                .addComponent(imagenPelicula, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabel9)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(formatoPelicula)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jLabel10)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(generoPelicula)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel11)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(duracionPelicula))
-                    .addComponent(imagenPelicula, javax.swing.GroupLayout.PREFERRED_SIZE, 262, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(85, Short.MAX_VALUE))
+                        .addComponent(reservar)
+                        .addContainerGap(25, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel12)
+                        .addGap(158, 158, 158))))
         );
 
         javax.swing.GroupLayout MirarPeliculasNOLayout = new javax.swing.GroupLayout(MirarPeliculasNO.getContentPane());
         MirarPeliculasNO.getContentPane().setLayout(MirarPeliculasNOLayout);
         MirarPeliculasNOLayout.setHorizontalGroup(
             MirarPeliculasNOLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(MirarPeliculasNOLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         MirarPeliculasNOLayout.setVerticalGroup(
             MirarPeliculasNOLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+
+        registro.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Nombre", "Contraseña", "Tarjeta"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane3.setViewportView(registro);
+        if (registro.getColumnModel().getColumnCount() > 0) {
+            registro.getColumnModel().getColumn(0).setResizable(false);
+            registro.getColumnModel().getColumn(1).setResizable(false);
+            registro.getColumnModel().getColumn(2).setResizable(false);
+        }
+
+        javax.swing.GroupLayout registroFrameLayout = new javax.swing.GroupLayout(registroFrame.getContentPane());
+        registroFrame.getContentPane().setLayout(registroFrameLayout);
+        registroFrameLayout.setHorizontalGroup(
+            registroFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(registroFrameLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(15, Short.MAX_VALUE))
+        );
+        registroFrameLayout.setVerticalGroup(
+            registroFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, registroFrameLayout.createSequentialGroup()
+                .addContainerGap(14, Short.MAX_VALUE)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -548,7 +675,7 @@ public class Usuario extends javax.swing.JFrame {
             }
         });
 
-        jButton7.setText("jButton7");
+        jButton7.setText("Mirar Peliculas");
         jButton7.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton7ActionPerformed(evt);
@@ -567,14 +694,15 @@ public class Usuario extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap(54, Short.MAX_VALUE)
-                .addComponent(jLabel1)
-                .addGap(53, 53, 53))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGap(36, 36, 36)
-                .addComponent(jButton7)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addGap(53, 53, 53))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(jButton7)
+                        .addGap(107, 107, 107)
+                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -605,12 +733,12 @@ public class Usuario extends javax.swing.JFrame {
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
-       LoginUsuario a= new LoginUsuario();
+        LoginUsuario a = new LoginUsuario();
         a.setVisible(true);
-        a.setBounds(500, 300,900, 425);
+        a.setBounds(500, 300, 900, 425);
         this.setVisible(false);
-       
-       
+
+
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -622,25 +750,29 @@ public class Usuario extends javax.swing.JFrame {
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
-         Usuario s= new Usuario();
-         s.setVisible(true);
-         s.setLocationRelativeTo(null);
-         s.setBounds(560, 300,  460, 480);
-         Registrarse.setVisible(false);
-        
+        Usuario s = new Usuario();
+        s.setVisible(true);
+        s.setLocationRelativeTo(null);
+        s.setBounds(560, 300, 460, 480);
+        Registrarse.setVisible(false);
+
     }//GEN-LAST:event_jButton4ActionPerformed
-    
-    public void leerRegistro(String archivo, String usuario, boolean confirmar){
+
+    public boolean registroExitoso() {
+        return false;
+    }
+
+    public void leerRegistro(String archivo, String usuario, boolean confirmar) {
         try {
-            FileReader fr= new FileReader(archivo);
-            BufferedReader br= new BufferedReader(fr);
+            FileReader fr = new FileReader(archivo);
+            BufferedReader br = new BufferedReader(fr);
             String line = br.readLine();
             String[] campos;
-            while(line!=null){
-                campos= line.split(",");
-                if(usuario.equals(campos[0])){
-                    confirmar= true;
-                }else{
+            while (line != null) {
+                campos = line.split(",");
+                if (usuario.equals(campos[0])) {
+                    confirmar = true;
+                } else {
                     line = br.readLine();
                 }
             }
@@ -649,41 +781,44 @@ public class Usuario extends javax.swing.JFrame {
         } catch (Exception e) {
         }
     }
-    /*public void grabarRegistro(String Archivo, String Usuario, String Clave, boolean confirmar){
-        if (confirmar==true) {
+
+    public void grabarRegistro(String Archivo, String Usuario, String Clave, boolean confirmar, String codigoTarjeta) {
+        if (confirmar == true) {
             JOptionPane.showMessageDialog(null, "EL nombre de Usuario ya existe");
             nombre.setText("");
         } else {
             try {
                 DefaultTableModel model = (DefaultTableModel) registro.getModel();
-                model.addRow(new Object[]{Usuario , Clave});
+                model.addRow(new Object[]{Usuario, Clave, codigoTarjeta});
             } catch (Exception e) {
             }
             //RegistroUsuario = new File("./registro.txt");
-            DefaultTableModel model2= (DefaultTableModel) registro.getModel();
-            try(BufferedWriter bw = new BufferedWriter(new FileWriter(RegistroUsuario,true))) {
-                 int filas= registro.getRowCount();
-                 for (int i = 0; i < filas; i++) {
+            DefaultTableModel model2 = (DefaultTableModel) registro.getModel();
+            try (BufferedWriter bw = new BufferedWriter(new FileWriter(Registro, true))) {
+                int filas = registro.getRowCount();
+                for (int i = 0; i < filas; i++) {
                     Object nombreUsuario = model2.getValueAt(i, 0);
                     Object security = model2.getValueAt(i, 1);
-                    bw.write(nombreUsuario + "," + security);
+                    Object codigoTarget = model2.getValueAt(i, 2);
+                    bw.write(nombreUsuario + "," + security + "," + codigoTarget);
                     bw.newLine();
                 }
-                 bw.close();
+                bw.close();
             } catch (Exception e) {
             }
         }
-    }*/
-    public boolean verificarLogin(String Archivo, String nombre, String contraseña){
+    }
+
+    public boolean verificarLogin(String Archivo, String nombre, String contraseña) {
         System.out.println("ENTRÓ A VERIFICAR LOGIN");
         try {
-            FileReader fr= new FileReader (Archivo);
+            FileReader fr = new FileReader(Archivo);
             System.out.println("creó el file");
             BufferedReader br = new BufferedReader(fr);
             System.out.println("entro al buffer");
             String Linea = br.readLine();
             String[] campos;
-            while(Linea!=null){
+            while (Linea != null) {
                 System.out.println("Entro al while");
                 campos = Linea.split(",");
                 System.out.println(nombre);
@@ -691,7 +826,7 @@ public class Usuario extends javax.swing.JFrame {
                 if (nombre.equals(campos[0]) && contraseña.equals(campos[1])) {
                     return true;
                 } else {
-                    Linea= br.readLine();
+                    Linea = br.readLine();
                 }
             }
             br.close();
@@ -700,63 +835,98 @@ public class Usuario extends javax.swing.JFrame {
         }
         return false;
     }
-    
-    
-    
-    public boolean verificarUsuario(String archivo, String nombre){
-        try{
-        FileReader fr= new FileReader(archivo);
-        BufferedReader br= new BufferedReader(fr);
-        String linea = br.readLine();
-        String[] campos;
-        while(linea!=null){
-            campos= linea.split(",");
-            if(nombre.equals(campos[0])){
-                return true;
-            }else{
-                linea = br.readLine();
+
+    public boolean verificarUsuario(String archivo, String nombre) {
+        try {
+            FileReader fr = new FileReader(archivo);
+            BufferedReader br = new BufferedReader(fr);
+            String linea = br.readLine();
+            String[] campos;
+            while (linea != null) {
+                campos = linea.split(",");
+                if (nombre.equals(campos[0])) {
+                    return true;
+                } else {
+                    linea = br.readLine();
+                }
             }
-        }
-        br.close();
-        fr.close();
-        
-        }catch (Exception e){
+            br.close();
+            fr.close();
+
+        } catch (Exception e) {
         }
         return false;
     }
+
+    public boolean verificarIngreso(String Archivo, String nombre, String contraseña) {
+        System.out.println("ENTRÓ A VERIFICAR LOGIN");
+        try {
+            FileReader fr = new FileReader(Archivo);
+            System.out.println("creó el file");
+            BufferedReader br = new BufferedReader(fr);
+            System.out.println("entro al buffer");
+            String Linea = br.readLine();
+            String[] campos;
+            while (Linea != null) {
+                campos = Linea.split(",");
+                if (nombre.equals(campos[0]) && contraseña.equals(campos[1])) {
+                    return true;
+                } else {
+                    Linea = br.readLine();
+                }
+            }
+            br.close();
+            fr.close();
+        } catch (Exception e) {
+        }
+        return false;
+    }
+
     private void ingresarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ingresarButtonActionPerformed
         // TODO add your handling code here:
-          boolean login = false;
+        boolean login = false;
         String archivo = "./registro.txt";
         String contraseña1 = new String(contraseña.getPassword());
         String contraseña2 = new String(validacion.getPassword());
-        if(verificarUsuario(archivo, nombre.getText())==false){
-        if (contraseña1.equals(contraseña2)){
-            leerRegistro(archivo, nombre.getText(), login);
-            //grabarRegistro(archivo, nombre.getText(), contraseña1, login);
-            JOptionPane.showMessageDialog(null, "Registro exitoso");
-            crearLista(ptr, contraseña1, nombre.getText(), codigo.getText());
-            agregarArchivo(ptr, archivoUsuario);
-            Ingresar.setVisible(true);
-            Ingresar.setBounds(400, 300, 500, 400);
-            Registrarse.setVisible(false);
+        if (verificarUsuario(archivo, nombre.getText()) == false) {
+            if (contraseña1.equals(contraseña2)) {
+                leerRegistro(archivo, nombre.getText(), login);
+                grabarRegistro(archivo, nombre.getText(), contraseña1, login, codigo.getText());
+                JOptionPane.showMessageDialog(null, "Registro exitoso");
+                //crearLista(ptr, contraseña1, nombre.getText(), codigo.getText());
+                //agregarArchivo(ptr, archivoUsuario);
+                Ingresar.setVisible(true);
+                Ingresar.setBounds(400, 300, 500, 400);
+                Registrarse.setVisible(false);
+            } else {
+                JOptionPane.showMessageDialog(null, "Claves no coinciden");
+                validacion.setText("");
+            }
         } else {
-            JOptionPane.showMessageDialog(null, "Claves no coinciden");
-            validacion.setText("");
-        }
-        }else{
-         JOptionPane.showMessageDialog(null, "Usuario ya existente");
-         nombre.setText("");
+            JOptionPane.showMessageDialog(null, "Usuario ya existente");
+            nombre.setText("");
         }
     }//GEN-LAST:event_ingresarButtonActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         // TODO add your handling code here:
+        String archivo = "./registro.txt";
+        String pass = new String(password.getPassword());
+        boolean register = verificarIngreso(archivo, nombreIngreso.getText(), pass);
+        if (register == true) {
+            System.out.println("INGRESÓ");
+            MirarPeliculasNO.setVisible(true);
+            MirarPeliculasNO.setBounds(500, 500, 685, 667);
+        } else {
+            JOptionPane.showMessageDialog(this, "Usuario ó contraseña invalida");
+            nombreIngreso.setText("");
+            password.setText("");
+        }
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
         // TODO add your handling code here:
-        Usuario u= new Usuario();
+        Usuario u = new Usuario();
         u.setVisible(true);
         u.setBounds(620, 300, 460, 480);
         Ingresar.setVisible(false);
@@ -769,9 +939,27 @@ public class Usuario extends javax.swing.JFrame {
 
     private void InformacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_InformacionActionPerformed
         // TODO add your handling code here:
-       String nombrePelicula= (String) mostrarPeliculas.getModel().getValueAt(mostrarPeliculas.getSelectedRow(), 0);
-       mostrarInformacionPelicula("archivoPelicula.txt",nombrePelicula);
+        String nombrePelicula = (String) mostrarPeliculas.getModel().getValueAt(mostrarPeliculas.getSelectedRow(), 0);
+        mostrarInformacionPelicula("archivoPelicula.txt", nombrePelicula);
+        try {
+            buscarInformacionPelicula(ptrSala, nombrePelicula);
+        } catch (Exception e) {
+            System.out.println("Error al mostrar la lista de horarios" + e.getMessage());
+        }
+
     }//GEN-LAST:event_InformacionActionPerformed
+
+    private void atrasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_atrasActionPerformed
+        // TODO add your handling code here:
+        LoginUsuario lu = new LoginUsuario();
+        lu.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_atrasActionPerformed
+
+    private void jButton5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton5MouseClicked
+        // TODO add your handling code here:
+
+    }//GEN-LAST:event_jButton5MouseClicked
 
     /**
      * @param args the command line arguments
@@ -813,6 +1001,7 @@ public class Usuario extends javax.swing.JFrame {
     private javax.swing.JFrame Ingresar;
     private javax.swing.JFrame MirarPeliculasNO;
     private javax.swing.JFrame Registrarse;
+    private javax.swing.JButton atras;
     private javax.swing.JTextField codigo;
     private javax.swing.JPasswordField contraseña;
     private javax.swing.JLabel duracionPelicula;
@@ -830,6 +1019,7 @@ public class Usuario extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -842,12 +1032,18 @@ public class Usuario extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
-    private javax.swing.JPasswordField jPasswordField1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JList<String> mostrarPelicula;
     private javax.swing.JTable mostrarPeliculas;
     private javax.swing.JTextField nombre;
+    private javax.swing.JTextField nombreIngreso;
     private javax.swing.JLabel nombreMovie;
+    private javax.swing.JPasswordField password;
+    private javax.swing.JTable registro;
+    private javax.swing.JFrame registroFrame;
+    private javax.swing.JButton reservar;
     private javax.swing.JPasswordField validacion;
     // End of variables declaration//GEN-END:variables
 }
