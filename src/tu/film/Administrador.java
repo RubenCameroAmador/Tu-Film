@@ -43,15 +43,19 @@ public class Administrador extends javax.swing.JFrame {
    File archivoEstado;
    File archivoTipoPeli;
    File archivoPelicula;
-   public static sala ptrSala;
+   sala ptrSala;
     /**
      * Creates new form Administrador
      */
-    public Administrador() {
+   
+   Entrada ent;
+    public Administrador(Entrada ent) {
         initComponents();
         ptr= null;
         ptr2= null;
         ptr3=null;
+        
+        this.ent=ent;
         
         archivoProovedor = new File("./archivoProovedor.txt");
         archivoEstado = new File("./archivoEstado.txt");
@@ -255,7 +259,7 @@ public class Administrador extends javax.swing.JFrame {
    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //Gestion Salas de Cine/////
 
-    public static sala getPtrSala() {
+    public sala getPtrSala() {
         return ptrSala;
     }
     
@@ -356,7 +360,7 @@ public class Administrador extends javax.swing.JFrame {
         return ptr;
     }
     
-       void insertarPelicula(sala ptr, String Sala, String dia, String nombrePelicula, int hora){
+       sala insertarPelicula(sala ptr, String Sala, String dia, String nombrePelicula, int hora){
            sala p = ptr;
            while(p!=null && !p.nombre.equalsIgnoreCase(Sala)){
                p=p.LinkSala;
@@ -368,6 +372,7 @@ public class Administrador extends javax.swing.JFrame {
            r.peliculaNombre=nombrePelicula;
            boolean ingreso = false;
            if(q==null){
+                System.out.println(r.peliculaNombre);
                p.linkPeli=r;
            }else{
                while(q.linkPelicula!=null && ingreso==false){
@@ -376,9 +381,12 @@ public class Administrador extends javax.swing.JFrame {
                if(q.diaPelicula.equalsIgnoreCase(dia) && q.horaPelicula==hora){
                    JOptionPane.showMessageDialog(null, "Ya existe una pelicula con estas especificaciones");
                }else{
+                System.out.println(r.peliculaNombre);
                q.linkPelicula=r;
                }
            }
+           
+           return ptr;
            
        }
    
@@ -1626,18 +1634,18 @@ public class Administrador extends javax.swing.JFrame {
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         // TODO add your handling code here:
-        Entrada a= new Entrada();
-        a.setVisible(true);
-        a.setBounds(500, 300,900, 425);
+     
+        ent.setVisible(true);
+        ent.setBounds(500, 300,900, 425);
         this.setVisible(false);
     
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
         // TODO add your handling code here:
-        Administrador a = new Administrador();
-        a.setVisible(true);
-        a.setBounds(570, 300, 560, 530);
+
+        this.setVisible(true);
+        this.setBounds(570, 300, 560, 530);
         Listas.setVisible(false);
     }//GEN-LAST:event_jButton6ActionPerformed
 
@@ -1647,27 +1655,27 @@ public class Administrador extends javax.swing.JFrame {
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
         // TODO add your handling code here:
-        Administrador a = new Administrador();
-            a.setVisible(true);
-            a.setLocationRelativeTo(null);
-            a.setBounds(570, 300, 560, 530);
+ 
+            this.setVisible(true);
+            this.setLocationRelativeTo(null);
+            this.setBounds(570, 300, 560, 530);
             gestionPelicula.setVisible(false);
     }//GEN-LAST:event_jButton8ActionPerformed
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
         // TODO add your handling code here:
-        Administrador a = new Administrador();
-            a.setVisible(true);
-            a.setLocationRelativeTo(null);
-            a.setBounds(570, 300, 560, 530);
+
+            this.setVisible(true);
+            this.setLocationRelativeTo(null);
+            this.setBounds(570, 300, 560, 530);
             gestionFunciones.setVisible(false);
     }//GEN-LAST:event_jButton7ActionPerformed
 
     private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
         // TODO add your handling code here:
-        Administrador a= new Administrador();
-        a.setVisible(true);
-        a.setBounds(570, 300, 560, 530);
+     
+        this.setVisible(true);
+        this.setBounds(570, 300, 560, 530);
         boletas.setVisible(false);
     }//GEN-LAST:event_jButton9ActionPerformed
 
@@ -1766,7 +1774,7 @@ public class Administrador extends javax.swing.JFrame {
         String dia1= diaBox;
       
        try{
-        insertarPelicula(ptrSala, sala1, dia1, peli1, Integer.parseInt(horaBox));
+        ptrSala=insertarPelicula(ptrSala, sala1, dia1, peli1, Integer.parseInt(horaBox));
         mostrarMultilistaPelicula(ptrSala);
        }catch(Exception e){
            System.out.println("Error al guardar la pelicula"+e.getMessage());
@@ -1794,10 +1802,10 @@ public class Administrador extends javax.swing.JFrame {
 
     private void atrasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_atrasActionPerformed
         // TODO add your handling code here:
-            Administrador a = new Administrador();
-            a.setVisible(true);
-            a.setLocationRelativeTo(null);
-            a.setBounds(570, 300, 560, 530);
+           
+            this.setVisible(true);
+            this.setLocationRelativeTo(null);
+            this.setBounds(570, 300, 560, 530);
             gestionFunciones.setVisible(false);
     }//GEN-LAST:event_atrasActionPerformed
 
@@ -1831,7 +1839,7 @@ public class Administrador extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Administrador().setVisible(true);
+                new Administrador(null).setVisible(true);
             }
         });
     }

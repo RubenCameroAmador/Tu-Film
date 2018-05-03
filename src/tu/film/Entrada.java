@@ -23,8 +23,11 @@ public class Entrada extends javax.swing.JFrame {
     /**
      * Creates new form Entrada
      */
+    
+    Administrador a;
     public Entrada() {
-        initComponents();   
+        initComponents();
+        a = new Administrador(this);
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -206,7 +209,6 @@ public class Entrada extends javax.swing.JFrame {
         String contraseña= "0";
         String pass = new String(password.getPassword());
         if(nombreUsuario.getText().equalsIgnoreCase(admin)&&contraseña.equalsIgnoreCase(pass)){
-            Administrador a = new Administrador();
             a.setVisible(true);
             a.setLocationRelativeTo(null);
             a.setBounds(570, 300, 560, 530);
@@ -222,7 +224,8 @@ public class Entrada extends javax.swing.JFrame {
 
     private void usuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_usuarioActionPerformed
         // TODO add your handling code here:
-           LoginUsuario l= new LoginUsuario();
+        System.out.println(a.ptrSala.linkPeli.peliculaNombre);
+           LoginUsuario l= new LoginUsuario(a.getPtrSala());
         l.setVisible(true);
         l.setLocationRelativeTo(null);
         l.setBounds(570, 280, 710, 490);
@@ -240,10 +243,9 @@ public class Entrada extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        Entrada e= new Entrada();
+
         administradorLogin.setVisible(false);
-        e.setVisible(true);
-        e.setBounds(500, 300,900, 425);
+        this.setVisible(true);
       
     }//GEN-LAST:event_jButton1ActionPerformed
 

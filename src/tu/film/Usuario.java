@@ -33,11 +33,16 @@ public class Usuario extends javax.swing.JFrame {
     /**
      * Creates new form Usuario
      */
-    public Usuario() {
+    
+    sala ptrSala;
+    public Usuario(sala ptrSala) {
         initComponents();
+        this.ptrSala=ptrSala;
         ptr = null;
         mostrartablaPeliculas("archivoPelicula.txt");
         Registro = new File("./registro.txt");
+        DefaultListModel model = new DefaultListModel();
+        mostrarPelicula.setModel(model);
         //escribir();
 
     }
@@ -50,8 +55,6 @@ public class Usuario extends javax.swing.JFrame {
     }*/
 
     //Lo mas importante esta aqui. ¡never forget!
-    Administrador a = new Administrador();
-    sala ptrSala = a.getPtrSala();
 
     class registroUsuario {
 
@@ -140,9 +143,12 @@ public class Usuario extends javax.swing.JFrame {
         DefaultListModel model = (DefaultListModel) mostrarPelicula.getModel();
         model.clear();
         sala p = ptr;
+        
         while (p != null) {
+            System.out.println(p.nombre);
             pelicula q = p.linkPeli;
             while (q != null) {
+                System.out.println(q.peliculaNombre);
                 if (q.peliculaNombre.equalsIgnoreCase(nombrePelicula)) {
                     model.addElement("Dia: " + q.diaPelicula + " , " + "Hora: " + q.horaPelicula);
                 }
@@ -479,6 +485,11 @@ public class Usuario extends javax.swing.JFrame {
         });
 
         reservar.setText("Reservar Entrada");
+        reservar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                reservarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -733,7 +744,7 @@ public class Usuario extends javax.swing.JFrame {
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
-        LoginUsuario a = new LoginUsuario();
+        LoginUsuario a = new LoginUsuario(ptrSala);
         a.setVisible(true);
         a.setBounds(500, 300, 900, 425);
         this.setVisible(false);
@@ -750,7 +761,7 @@ public class Usuario extends javax.swing.JFrame {
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
-        Usuario s = new Usuario();
+        Usuario s = new Usuario(ptrSala);
         s.setVisible(true);
         s.setLocationRelativeTo(null);
         s.setBounds(560, 300, 460, 480);
@@ -926,7 +937,7 @@ public class Usuario extends javax.swing.JFrame {
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
         // TODO add your handling code here:
-        Usuario u = new Usuario();
+        Usuario u = new Usuario(ptrSala);
         u.setVisible(true);
         u.setBounds(620, 300, 460, 480);
         Ingresar.setVisible(false);
@@ -951,7 +962,7 @@ public class Usuario extends javax.swing.JFrame {
 
     private void atrasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_atrasActionPerformed
         // TODO add your handling code here:
-        LoginUsuario lu = new LoginUsuario();
+        LoginUsuario lu = new LoginUsuario(ptrSala);
         lu.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_atrasActionPerformed
@@ -960,6 +971,10 @@ public class Usuario extends javax.swing.JFrame {
         // TODO add your handling code here:
 
     }//GEN-LAST:event_jButton5MouseClicked
+
+    private void reservarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reservarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_reservarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -991,7 +1006,7 @@ public class Usuario extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Usuario().setVisible(true);
+                new Usuario(null).setVisible(true);
             }
         });
     }

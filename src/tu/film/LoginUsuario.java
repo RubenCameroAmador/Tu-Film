@@ -12,6 +12,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import javax.swing.Timer;
+import tu.film.Administrador.sala;
 import static tu.film.LoginUsuario.fecha;
 
 /**
@@ -24,7 +25,10 @@ public class LoginUsuario extends javax.swing.JFrame {
      * Creates new form LoginUsuario
      */
     public static boolean abierta= false;
-    public LoginUsuario() {
+    
+    sala ptr;
+    public LoginUsuario(sala ptr) {
+        this.ptr=ptr;
         initComponents();
         Timer tiempo= new Timer(100, new LoginUsuario.horas());
         tiempo.start();
@@ -186,7 +190,7 @@ public class LoginUsuario extends javax.swing.JFrame {
 
     private void siActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_siActionPerformed
         // TODO add your handling code here:
-        Usuario s= new Usuario();
+        Usuario s= new Usuario(ptr);
         s.setVisible(true);
         s.setBounds(620, 300, 460, 480);
         this.setVisible(false);
@@ -195,7 +199,7 @@ public class LoginUsuario extends javax.swing.JFrame {
 
     private void noActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_noActionPerformed
         // TODO add your handling code here:
-        Usuario u = new Usuario();
+        Usuario u = new Usuario(ptr);
          abierta=true;
         u.setVisible(true);
         abierta=true;
@@ -241,7 +245,7 @@ public class LoginUsuario extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new LoginUsuario().setVisible(true);
+                new LoginUsuario(null).setVisible(true);
             }
         });
     }
