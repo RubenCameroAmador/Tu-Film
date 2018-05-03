@@ -224,12 +224,17 @@ public class Entrada extends javax.swing.JFrame {
 
     private void usuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_usuarioActionPerformed
         // TODO add your handling code here:
-        System.out.println(a.ptrSala.linkPeli.peliculaNombre);
+        try {
+            System.out.println(a.ptrSala.linkPeli.peliculaNombre);
            LoginUsuario l= new LoginUsuario(a.getPtrSala());
         l.setVisible(true);
         l.setLocationRelativeTo(null);
         l.setBounds(570, 280, 710, 490);
        this.setVisible(false);
+        } catch (Exception e) {
+            System.out.println("No hay peliculas agregadas "+e.getMessage());
+        }
+        
     }//GEN-LAST:event_usuarioActionPerformed
 
     private void adminActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_adminActionPerformed

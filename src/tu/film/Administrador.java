@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package tu.film;
+
 import java.awt.Image;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -21,229 +22,244 @@ import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 
-
 /**
  *
  * @author Adriana Arango y Ruben Camero
  */
 public class Administrador extends javax.swing.JFrame {
-   ImageIcon imagen;
-   String proovedorPeli = "";
-   String estadoPeli="";
-   String tipoPeliculas="";
-   String rutaImagen;
-   String salaBox;
-   String movieBox;
-   String horaBox;
-   String diaBox;
-   Nodo ptr;
-   Estado ptr2;
-   tipoPeli ptr3;
-   File archivoProovedor;
-   File archivoEstado;
-   File archivoTipoPeli;
-   File archivoPelicula;
-   sala ptrSala;
+
+    ImageIcon imagen;
+    String proovedorPeli = "";
+    String estadoPeli = "";
+    String tipoPeliculas = "";
+    String rutaImagen;
+    String salaBox;
+    String movieBox;
+    String horaBox;
+    String diaBox;
+    Nodo ptr;
+    Estado ptr2;
+    tipoPeli ptr3;
+    File archivoProovedor;
+    File archivoEstado;
+    File archivoTipoPeli;
+    File archivoPelicula;
+    sala ptrSala;
     /**
      * Creates new form Administrador
      */
-   
-   Entrada ent;
+
+    Entrada ent;
+
     public Administrador(Entrada ent) {
         initComponents();
-        ptr= null;
-        ptr2= null;
-        ptr3=null;
-        
-        this.ent=ent;
-        
+        ptr = null;
+        ptr2 = null;
+        ptr3 = null;
+
+        this.ent = ent;
+
         archivoProovedor = new File("./archivoProovedor.txt");
         archivoEstado = new File("./archivoEstado.txt");
         archivoTipoPeli = new File("./archivoTipoPeli.txt");
-        
-        
+
         DefaultListModel model = new DefaultListModel();
         proovedorList.setModel(model);
-        extraerArchivo("archivoProovedor.txt",proovedor);
-        extraerArchivo("archivoEstado.txt",Estado);
-        extraerArchivo("archivoTipoPeli.txt",tipoPeliculaBox);
-        
-        String[] columnas =new String[11];
-        for (int i = 0; i < 11 ; i++) {
-            columnas[i]=Peliculas.getModel().getColumnName(i);
+        extraerArchivo("archivoProovedor.txt", proovedor);
+        extraerArchivo("archivoEstado.txt", Estado);
+        extraerArchivo("archivoTipoPeli.txt", tipoPeliculaBox);
+
+        String[] columnas = new String[11];
+        for (int i = 0; i < 11; i++) {
+            columnas[i] = Peliculas.getModel().getColumnName(i);
         }
         try {
             Peliculas.setModel(TuFilm.Mostrar("archivoPelicula.txt", columnas));
         } catch (Exception e) {
-            System.out.println("Error en mostrar el archivo existente"+e.getMessage());
+            System.out.println("Error en mostrar el archivo existente" + e.getMessage());
         }
-        
+
         //Gestion Salas
-        ptrSala=null;
+        ptrSala = null;
         getPelicula("archivoPelicula.txt");
         listaAgregarFuncion.setModel(new DefaultListModel());
-        ptrSala = insertarSala( ptrSala, "Sala 1");
-        ptrSala = insertarSala( ptrSala, "Sala 2");
+        ptrSala = insertarSala(ptrSala, "Sala 1");
+        ptrSala = insertarSala(ptrSala, "Sala 2");
         mostrarListaSala(ptrSala);
     }
-    class Estado{
+
+    class Estado {
+
         Estado linkEstado;
         String estado;
         String numeroEstado;
     }
-    class tipoPeli{
+
+    class tipoPeli {
+
         tipoPeli linkT;
         String tipo;
         String numTipo;
     }
-    class Nodo{
-    Nodo link;
-    String Proovedor;
-    String numero;
+
+    class Nodo {
+
+        Nodo link;
+        String Proovedor;
+        String numero;
     }
-    
-    public Nodo crearLista(Nodo ptr, String nombreProovedor, String num){
+
+    public Nodo crearLista(Nodo ptr, String nombreProovedor, String num) {
         Nodo p = new Nodo();
-        p.numero= num;
-        p.Proovedor= nombreProovedor;
-        p.link=ptr;
-        ptr=p;
+        p.numero = num;
+        p.Proovedor = nombreProovedor;
+        p.link = ptr;
+        ptr = p;
         return ptr;
     }
-    public tipoPeli crearLista(tipoPeli ptr, String nombreTipo, String numTipo){
+
+    public tipoPeli crearLista(tipoPeli ptr, String nombreTipo, String numTipo) {
         tipoPeli p = new tipoPeli();
-        p.numTipo= numTipo;
-        p.tipo= nombreTipo;
-        p.linkT=ptr;
-        ptr=p;
+        p.numTipo = numTipo;
+        p.tipo = nombreTipo;
+        p.linkT = ptr;
+        ptr = p;
         return ptr;
     }
-    public Estado crearLista(Estado ptr, String estado, String num){
+
+    public Estado crearLista(Estado ptr, String estado, String num) {
         Estado p = new Estado();
-        p.estado= estado;
-        p.numeroEstado= num;
-        p.linkEstado=ptr;
-        ptr=p;
+        p.estado = estado;
+        p.numeroEstado = num;
+        p.linkEstado = ptr;
+        ptr = p;
         return ptr;
     }
-    
-    public void mostrarLista(Nodo ptr){
+
+    public void mostrarLista(Nodo ptr) {
         DefaultListModel model = (DefaultListModel) proovedorList.getModel();
         model.clear();
         Nodo p = ptr;
-        while( p!=null ){
-            model.addElement(p.numero+","+p.Proovedor);
-            
+        while (p != null) {
+            model.addElement(p.numero + "," + p.Proovedor);
+
             p = p.link;
         }
     }
-    public void mostrarLista(tipoPeli ptr){
+
+    public void mostrarLista(tipoPeli ptr) {
         DefaultListModel model = (DefaultListModel) proovedorList.getModel();
         model.clear();
         tipoPeli p = ptr;
-        while( p!=null ){
-            model.addElement(p.numTipo+","+p.tipo); 
+        while (p != null) {
+            model.addElement(p.numTipo + "," + p.tipo);
             p = p.linkT;
         }
     }
-    public void mostrarLista(Estado ptr){
-         DefaultListModel model = (DefaultListModel) proovedorList.getModel();
-         model.clear();
-         Estado p = ptr;
-         while(p!=null){
-             model.addElement(p.numeroEstado+","+p.estado);
-             p=p.linkEstado;
-         }
+
+    public void mostrarLista(Estado ptr) {
+        DefaultListModel model = (DefaultListModel) proovedorList.getModel();
+        model.clear();
+        Estado p = ptr;
+        while (p != null) {
+            model.addElement(p.numeroEstado + "," + p.estado);
+            p = p.linkEstado;
+        }
     }
-    
-    public void agregarArchivo(Nodo ptr, File archivo){
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(archivo, true))){
-            Nodo p= ptr;
-            while(p!=null){
-                bw.write(p.numero+","+p.Proovedor);
+
+    public void agregarArchivo(Nodo ptr, File archivo) {
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(archivo, true))) {
+            Nodo p = ptr;
+            while (p != null) {
+                bw.write(p.numero + "," + p.Proovedor);
                 bw.newLine();
-                p=p.link;
+                p = p.link;
             }
             bw.close();
         } catch (Exception e) {
             System.out.println("Error grabar archivo:" + e.getMessage());
         }
     }
-    public void agregarArchivo(tipoPeli ptr, File archivo){
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(archivo, true))){
-            tipoPeli p= ptr;
-            while(p!=null){
-                bw.write(p.numTipo+","+p.tipo);
+
+    public void agregarArchivo(tipoPeli ptr, File archivo) {
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(archivo, true))) {
+            tipoPeli p = ptr;
+            while (p != null) {
+                bw.write(p.numTipo + "," + p.tipo);
                 bw.newLine();
-                p=p.linkT;
+                p = p.linkT;
             }
             bw.close();
         } catch (Exception e) {
             System.out.println("Error grabar archivo:" + e.getMessage());
         }
     }
-    public void agregarArchivo(Estado ptr, File archivo){
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(archivo, true))){
-            Estado p= ptr;
-            while(p!=null){
-                bw.write(p.numeroEstado+","+p.estado);
+
+    public void agregarArchivo(Estado ptr, File archivo) {
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(archivo, true))) {
+            Estado p = ptr;
+            while (p != null) {
+                bw.write(p.numeroEstado + "," + p.estado);
                 bw.newLine();
-                p=p.linkEstado;
+                p = p.linkEstado;
             }
             bw.close();
         } catch (Exception e) {
             System.out.println("Error grabar archivo:" + e.getMessage());
         }
     }
-    public void extraerArchivo(String archivo, JComboBox box){
+
+    public void extraerArchivo(String archivo, JComboBox box) {
         try {
-            FileReader fr= new FileReader(archivo);
-            BufferedReader br= new BufferedReader(fr);
+            FileReader fr = new FileReader(archivo);
+            BufferedReader br = new BufferedReader(fr);
             String linea;
             linea = br.readLine();
             String[] campos;
-            int cont=0;
+            int cont = 0;
             boolean entro = false;
-            while(linea!=null){
+            while (linea != null) {
                 entro = true;
-                campos= linea.split(",");
+                campos = linea.split(",");
                 box.insertItemAt(campos[1], cont);
                 cont++;
                 linea = br.readLine();
             }
-            if(entro==false){
+            if (entro == false) {
                 JOptionPane.showMessageDialog(null, "No se encontraró");
             }
         } catch (Exception e) {
-            System.out.println("No extrajo la información de el archivo"+e.getMessage());
+            System.out.println("No extrajo la información de el archivo" + e.getMessage());
         }
     }
-    
-    public void getEstado(String nombreVariable){
-    estadoPeli= nombreVariable;
-    System.out.println("entra");
+
+    public void getEstado(String nombreVariable) {
+        estadoPeli = nombreVariable;
+        System.out.println("entra");
     }
-    public void getProovedor(String nombreVariable){
-    proovedorPeli= nombreVariable;
-    System.out.println("entra");
+
+    public void getProovedor(String nombreVariable) {
+        proovedorPeli = nombreVariable;
+        System.out.println("entra");
     }
-    public void getTipoPelicula(String nombreVariable){
-    tipoPeliculas= nombreVariable;
-    System.out.println("entra");
+
+    public void getTipoPelicula(String nombreVariable) {
+        tipoPeliculas = nombreVariable;
+        System.out.println("entra");
     }
-    
-    public String mostrarNumero(String archivo, String informacion){
+
+    public String mostrarNumero(String archivo, String informacion) {
         try {
-            FileReader fr= new FileReader(archivo);
-            BufferedReader br= new BufferedReader(fr);
+            FileReader fr = new FileReader(archivo);
+            BufferedReader br = new BufferedReader(fr);
             String linea;
             linea = br.readLine();
             String[] campos;
-            while(linea!=null){
-                campos=linea.split(",");
-                if(informacion.equalsIgnoreCase(campos[1])){
-                  return campos[0];  
-                }else{
+            while (linea != null) {
+                campos = linea.split(",");
+                if (informacion.equalsIgnoreCase(campos[1])) {
+                    return campos[0];
+                } else {
                     linea = br.readLine();
                 }
             }
@@ -251,185 +267,200 @@ public class Administrador extends javax.swing.JFrame {
             fr.close();
             return null;
         } catch (Exception e) {
-            System.out.println("Error al buscar el numero"+e.getMessage());
+            System.out.println("Error al buscar el numero" + e.getMessage());
         }
         return null;
     }
-   
-   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //Gestion Salas de Cine/////
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //Gestion Salas de Cine/////
     public sala getPtrSala() {
         return ptrSala;
     }
-    
-    
-    public void getPelicula(String archivo){
-        try{
-            FileReader fr= new FileReader(archivo);
-            BufferedReader br= new BufferedReader(fr);
+
+    public void getPelicula(String archivo) {
+        try {
+            FileReader fr = new FileReader(archivo);
+            BufferedReader br = new BufferedReader(fr);
             String linea;
             linea = br.readLine();
             String[] campos;
-            int pos=0;
-            while(linea!=null){
-                campos= linea.split(",");
+            int pos = 0;
+            while (linea != null) {
+                campos = linea.split(",");
                 BoxPelicula.insertItemAt(campos[2], pos);
                 pos++;
                 linea = br.readLine();
             }
             br.close();
             fr.close();
-        }catch(Exception e){}
+        } catch (Exception e) {
+        }
     }
-    
-    class sala{
+
+    class sala {
+
         String nombre;
         sala LinkSala;
         pelicula linkPeli;
     }
-    class pelicula{
+
+    class pelicula {
+
         String peliculaNombre;
         String diaPelicula;
         int horaPelicula;
         pelicula linkPelicula;
     }
-    public void getSala(String Sala){
-    salaBox= Sala;
+
+    public void getSala(String Sala) {
+        salaBox = Sala;
     }
-    public void getMovie(String movie){
-    movieBox= movie;
+
+    public void getMovie(String movie) {
+        movieBox = movie;
     }
-    public void getHora(String hora){
-    horaBox= hora;
+
+    public void getHora(String hora) {
+        horaBox = hora;
     }
-    public void getDia(String dia){
-    diaBox= dia;
+
+    public void getDia(String dia) {
+        diaBox = dia;
     }
-    public void buscarSala(sala ptr, String nombreSala, sala p, sala antp){
+
+    public sala buscarSala(sala ptr, String nombreSala) {
         System.out.println("Entro a buscar sala ");
-        p=ptr;
-        antp=null;
-        while(!p.nombre.equalsIgnoreCase(nombreSala)&&p.LinkSala!=null){
-            antp=p;
-            p=p.LinkSala;
+        sala p = ptr;
+        sala antp = null;
+        while (!p.nombre.equalsIgnoreCase(nombreSala) && p.LinkSala != null) {
+            antp = p;
+            p = p.LinkSala;
         }
-        if(!p.nombre.equalsIgnoreCase(nombreSala) && p.LinkSala==null){
-            p=null;
-        }     
+        if (!p.nombre.equalsIgnoreCase(nombreSala) && p.LinkSala == null) {
+            p = null;
+        }
+        return antp;
     }
-    
-    public void buscarPelicula(sala ptr, String sala, String nombrePelicula, String dia, int hora, pelicula q, pelicula antq, sala p , sala antp){
-        buscarSala(ptr, sala, p, antp);
-        if(p==null){
+
+    public pelicula buscarPelicula(sala ptr, String sala, String nombrePelicula, String dia, int hora) {
+        sala antp = buscarSala(ptr, sala);
+        sala p = antp.LinkSala;
+        if (p == null) {
             System.out.println("La sala  no existe");
-        }else{
-            antq=null;
-            q=p.linkPeli;
-            if(q!=null){
-                boolean loEncontro=false;
-                while(loEncontro==false && q.linkPelicula!=null){
-                    if(q.peliculaNombre.equals(nombrePelicula) && q.diaPelicula.equalsIgnoreCase(dia) && q.horaPelicula==hora){
-                        loEncontro=true;
-                        System.out.println("Encontró la pelicula");
-                    }else{
-                        antq=q;
-                        q=q.linkPelicula;
+        } else {
+            pelicula antq = null;
+            pelicula q = p.linkPeli;
+            if (q != null) {
+                boolean loEncontro = false;
+                while (loEncontro == false && q.linkPelicula != null) {
+                    if (q.peliculaNombre.equals(nombrePelicula) && q.diaPelicula.equalsIgnoreCase(dia) && q.horaPelicula == hora) {
+                        loEncontro = true;
+                         System.out.println("Encontró la pelicula");
+                         return antq;
+                    } else {
+                        antq = q;
+                        q = q.linkPelicula;
                     }
                 }
-                if(!q.peliculaNombre.equalsIgnoreCase(nombrePelicula) && q.linkPelicula==null){
-                    q=null;
+                if (!q.peliculaNombre.equalsIgnoreCase(nombrePelicula) && q.linkPelicula == null) {
+                    q = null;
+                    return antq;
                 }
-            }else{
+            } else {
                 JOptionPane.showMessageDialog(null, "No hay peliculas asignadas a esta funcion");
             }
         }
+        return null;
     }
-    
-    sala insertarSala(sala ptr, String nombre){
-         sala p = new sala();
-         p.nombre=nombre;
+
+    sala insertarSala(sala ptr, String nombre) {
+        sala p = new sala();
+        p.nombre = nombre;
         if (ptr == null) {
-          return p;
+            return p;
         }
         sala q = ptr;
-        while(q.LinkSala!=null){
-            q=q.LinkSala;
+        while (q.LinkSala != null) {
+            q = q.LinkSala;
         }
-        q.LinkSala=p;
+        q.LinkSala = p;
         return ptr;
     }
-    
-       sala insertarPelicula(sala ptr, String Sala, String dia, String nombrePelicula, int hora){
-           sala p = ptr;
-           while(p!=null && !p.nombre.equalsIgnoreCase(Sala)){
-               p=p.LinkSala;
-           }
-           pelicula q= p.linkPeli;
-           pelicula r = new pelicula();
-           r.diaPelicula=dia;
-           r.horaPelicula=hora;
-           r.peliculaNombre=nombrePelicula;
-           boolean ingreso = false;
-           if(q==null){
+
+    sala insertarPelicula(sala ptr, String Sala, String dia, String nombrePelicula, int hora) {
+        sala p = ptr;
+        while (p != null && !p.nombre.equalsIgnoreCase(Sala)) {
+            p = p.LinkSala;
+        }
+        pelicula q = p.linkPeli;
+        pelicula r = new pelicula();
+        r.diaPelicula = dia;
+        r.horaPelicula = hora;
+        r.peliculaNombre = nombrePelicula;
+        boolean ingreso = false;
+        if (q == null) {
+            System.out.println(r.peliculaNombre);
+            p.linkPeli = r;
+        } else {
+            while (q.linkPelicula != null && ingreso == false) {
+                q = q.linkPelicula;
+            }
+            if (q.diaPelicula.equalsIgnoreCase(dia) && q.horaPelicula == hora) {
+                JOptionPane.showMessageDialog(null, "Ya existe una pelicula con estas especificaciones");
+            } else {
                 System.out.println(r.peliculaNombre);
-               p.linkPeli=r;
-           }else{
-               while(q.linkPelicula!=null && ingreso==false){
-                       q=q.linkPelicula;
-               }
-               if(q.diaPelicula.equalsIgnoreCase(dia) && q.horaPelicula==hora){
-                   JOptionPane.showMessageDialog(null, "Ya existe una pelicula con estas especificaciones");
-               }else{
-                System.out.println(r.peliculaNombre);
-               q.linkPelicula=r;
-               }
-           }
-           
-           return ptr;
-           
-       }
-   
-       public void EliminarFuncionPelicula(sala ptr, String nombrePelicula, String sala, String dia, int hora){
-           System.out.println("Entro a eliminarFuncionPelicula");
-           pelicula q=null, antq=null;
-           sala p=null, antp=null;
-           buscarPelicula(ptr, sala, nombrePelicula, dia, hora, q, antq, p, antp);
-           if(q!=null){
-               if(p.linkPeli==q)
-               p.linkPeli=q.linkPelicula;
-               else
-                   antq.linkPelicula=q.linkPelicula;                    
-           }else{
-               JOptionPane.showMessageDialog(null, "Error al elimimnar pelicula");
-           }
-       }
-    
-    public void mostrarListaSala(sala ptr){
+                q.linkPelicula = r;
+            }
+        }
+
+        return ptr;
+
+    }
+
+    public void EliminarFuncionPelicula(sala ptr, String nombrePelicula, String sala, String dia, int hora) {
+        System.out.println("Entro a eliminarFuncionPelicula");
+        sala antp = buscarSala( ptr, sala);
+        sala p= antp.LinkSala;
+        pelicula antq =  buscarPelicula(ptr, sala, nombrePelicula, dia, hora);
+        pelicula q= antq.linkPelicula;
+        if (q != null) {
+            if (p.linkPeli==q) {
+                p.linkPeli=q.linkPelicula;
+            } else {
+                antq.linkPelicula=q.linkPelicula;
+            }
+            q.linkPelicula=null;
+        } else {
+            JOptionPane.showMessageDialog(null, "Error al elimimnar pelicula, La pelicula no existe");
+        }
+    }
+
+    public void mostrarListaSala(sala ptr) {
         DefaultListModel model = (DefaultListModel) listaAgregarFuncion.getModel();
         model.clear();
         sala p = ptr;
-        while( p!=null ){
+        while (p != null) {
             model.addElement(p.nombre);
             p = p.LinkSala;
         }
     }
-    public void mostrarMultilistaPelicula(sala ptr){
+
+    public void mostrarMultilistaPelicula(sala ptr) {
         DefaultListModel model = (DefaultListModel) listaAgregarFuncion.getModel();
         model.clear();
         sala p = ptr;
-        while( p!=null ){
+        while (p != null) {
             model.addElement(p.nombre);
             pelicula q = p.linkPeli;
-            while(q!=null){
-                model.addElement(q.peliculaNombre+","+q.diaPelicula+","+q.horaPelicula);
-                q=q.linkPelicula;
+            while (q != null) {
+                model.addElement(q.peliculaNombre + "," + q.diaPelicula + "," + q.horaPelicula);
+                q = q.linkPelicula;
             }
             p = p.LinkSala;
         }
     }
-    
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -1514,7 +1545,7 @@ public class Administrador extends javax.swing.JFrame {
         gestionPelicula.setLocationRelativeTo(null);
         gestionPelicula.setBounds(500, 150, 750, 850);
         this.setVisible(false);
-        
+
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void formatoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_formatoActionPerformed
@@ -1539,7 +1570,7 @@ public class Administrador extends javax.swing.JFrame {
 
     private void condicionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_condicionActionPerformed
         // TODO add your handling code here:
-        
+
     }//GEN-LAST:event_condicionActionPerformed
 
     private void agregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_agregarActionPerformed
@@ -1547,56 +1578,54 @@ public class Administrador extends javax.swing.JFrame {
         getEstado(Estado.getSelectedItem().toString());
         getProovedor(proovedor.getSelectedItem().toString());
         getTipoPelicula(tipoPeliculaBox.getSelectedItem().toString());
-            DefaultTableModel model = (DefaultTableModel) Peliculas.getModel();
-            String estado1= estadoPeli;
-            String proovedor1 = proovedorPeli;
-            String tipoPeli1 = tipoPeliculas;
-            proovedorNum.setText(mostrarNumero("archivoProovedor.txt",proovedor1));
-            estado.setText(mostrarNumero("archivoEstado.txt",estado1));
-            tipoPelicula.setText(mostrarNumero("archivoTipoPeli.txt",tipoPeli1));
-            model.addRow(new Object[]{codigoPelicula.getText(), codigoINCAA.getText(),
-            nombrePelicula.getText(),abreviatura.getText(),formato.getText(),proovedorPeli,
-            tipoPeli1,estado1,duracion.getText(),condicion.getText(),rutaImagen} );
+        DefaultTableModel model = (DefaultTableModel) Peliculas.getModel();
+        String estado1 = estadoPeli;
+        String proovedor1 = proovedorPeli;
+        String tipoPeli1 = tipoPeliculas;
+        proovedorNum.setText(mostrarNumero("archivoProovedor.txt", proovedor1));
+        estado.setText(mostrarNumero("archivoEstado.txt", estado1));
+        tipoPelicula.setText(mostrarNumero("archivoTipoPeli.txt", tipoPeli1));
+        model.addRow(new Object[]{codigoPelicula.getText(), codigoINCAA.getText(),
+            nombrePelicula.getText(), abreviatura.getText(), formato.getText(), proovedorPeli,
+            tipoPeli1, estado1, duracion.getText(), condicion.getText(), rutaImagen});
 
-             ImageIcon imagen1 = new ImageIcon(rutaImagen);
-             Icon icono= new ImageIcon(imagen1.getImage().getScaledInstance(foto.getWidth(), foto.getHeight(), Image.SCALE_DEFAULT));
-             foto.setIcon(icono);
+        ImageIcon imagen1 = new ImageIcon(rutaImagen);
+        Icon icono = new ImageIcon(imagen1.getImage().getScaledInstance(foto.getWidth(), foto.getHeight(), Image.SCALE_DEFAULT));
+        foto.setIcon(icono);
 
-            
         int desicion = JOptionPane.showConfirmDialog(null, "¿Deseas guardar la pelicula?");
-        if(desicion==JOptionPane.YES_OPTION){
-            
-            
-        archivoPelicula = new File("./archivoPelicula.txt");
-        DefaultTableModel model2 = (DefaultTableModel) Peliculas.getModel();
-        try {
-            PrintWriter writer = new PrintWriter(archivoPelicula);
-            writer.print("");
-            writer.close();
-        } catch (Exception e) {
-            System.out.println("Error Limpiar archivo: " + e.getMessage());
-        }
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(archivoPelicula, true))) {
-            int filas = Peliculas.getRowCount();
-            for (int i = 0; i < filas; i++) {
-                Object codigoP = model2.getValueAt(i, 0);
-                Object codigoIP = model2.getValueAt(i, 1);
-                Object nombrep = model2.getValueAt(i, 2);
-                Object abreviaturap = model2.getValueAt(i, 3);
-                Object formatop = model2.getValueAt(i, 4);
-                Object proovedorp = model2.getValueAt(i, 5);
-                Object tipoPeliculap = model2.getValueAt(i, 6);
-                Object estadop = model2.getValueAt(i, 7);
-                Object duracionp = model2.getValueAt(i, 8);
-                Object condicionp = model2.getValueAt(i, 9);
-                Object fotop = model2.getValueAt(i, 10);
-                bw.write(codigoP+","+codigoIP+","+nombrep+","+abreviaturap+","+formatop+","+proovedorp+","+tipoPeliculap+","+estadop+","+duracionp+","+condicionp+","+fotop);
-                bw.newLine();
+        if (desicion == JOptionPane.YES_OPTION) {
+
+            archivoPelicula = new File("./archivoPelicula.txt");
+            DefaultTableModel model2 = (DefaultTableModel) Peliculas.getModel();
+            try {
+                PrintWriter writer = new PrintWriter(archivoPelicula);
+                writer.print("");
+                writer.close();
+            } catch (Exception e) {
+                System.out.println("Error Limpiar archivo: " + e.getMessage());
             }
-            bw.close();
-        } catch (IOException e) {
-            System.out.println("Error guardar archivo");
-        }
+            try (BufferedWriter bw = new BufferedWriter(new FileWriter(archivoPelicula, true))) {
+                int filas = Peliculas.getRowCount();
+                for (int i = 0; i < filas; i++) {
+                    Object codigoP = model2.getValueAt(i, 0);
+                    Object codigoIP = model2.getValueAt(i, 1);
+                    Object nombrep = model2.getValueAt(i, 2);
+                    Object abreviaturap = model2.getValueAt(i, 3);
+                    Object formatop = model2.getValueAt(i, 4);
+                    Object proovedorp = model2.getValueAt(i, 5);
+                    Object tipoPeliculap = model2.getValueAt(i, 6);
+                    Object estadop = model2.getValueAt(i, 7);
+                    Object duracionp = model2.getValueAt(i, 8);
+                    Object condicionp = model2.getValueAt(i, 9);
+                    Object fotop = model2.getValueAt(i, 10);
+                    bw.write(codigoP + "," + codigoIP + "," + nombrep + "," + abreviaturap + "," + formatop + "," + proovedorp + "," + tipoPeliculap + "," + estadop + "," + duracionp + "," + condicionp + "," + fotop);
+                    bw.newLine();
+                }
+                bw.close();
+            } catch (IOException e) {
+                System.out.println("Error guardar archivo");
+            }
         }
     }//GEN-LAST:event_agregarActionPerformed
 
@@ -1607,15 +1636,15 @@ public class Administrador extends javax.swing.JFrame {
         Listas.setBounds(700, 300, 500, 400);
         this.setVisible(false);
     }//GEN-LAST:event_jButton4ActionPerformed
- 
+
     private void proovedorSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_proovedorSaveActionPerformed
         // TODO add your handling code here:
-     String provedor = proovedorname.getText();
-     String numero = proovedorNumber.getText();
-    
-     ptr= crearLista(ptr, provedor, numero);
-     mostrarLista(ptr);
-     agregarArchivo(ptr,archivoProovedor);
+        String provedor = proovedorname.getText();
+        String numero = proovedorNumber.getText();
+
+        ptr = crearLista(ptr, provedor, numero);
+        mostrarLista(ptr);
+        agregarArchivo(ptr, archivoProovedor);
     }//GEN-LAST:event_proovedorSaveActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -1634,11 +1663,10 @@ public class Administrador extends javax.swing.JFrame {
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         // TODO add your handling code here:
-     
         ent.setVisible(true);
-        ent.setBounds(500, 300,900, 425);
+        ent.setBounds(500, 300, 900, 425);
         this.setVisible(false);
-    
+
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
@@ -1655,25 +1683,25 @@ public class Administrador extends javax.swing.JFrame {
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
         // TODO add your handling code here:
- 
-            this.setVisible(true);
-            this.setLocationRelativeTo(null);
-            this.setBounds(570, 300, 560, 530);
-            gestionPelicula.setVisible(false);
+
+        this.setVisible(true);
+        this.setLocationRelativeTo(null);
+        this.setBounds(570, 300, 560, 530);
+        gestionPelicula.setVisible(false);
     }//GEN-LAST:event_jButton8ActionPerformed
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
         // TODO add your handling code here:
 
-            this.setVisible(true);
-            this.setLocationRelativeTo(null);
-            this.setBounds(570, 300, 560, 530);
-            gestionFunciones.setVisible(false);
+        this.setVisible(true);
+        this.setLocationRelativeTo(null);
+        this.setBounds(570, 300, 560, 530);
+        gestionFunciones.setVisible(false);
     }//GEN-LAST:event_jButton7ActionPerformed
 
     private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
         // TODO add your handling code here:
-     
+
         this.setVisible(true);
         this.setBounds(570, 300, 560, 530);
         boletas.setVisible(false);
@@ -1685,30 +1713,30 @@ public class Administrador extends javax.swing.JFrame {
 
     private void estadoSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_estadoSaveActionPerformed
         // TODO add your handling code here:
-     ptr2= crearLista(ptr2, estadoName.getText(), estadoNumber.getText());
-     mostrarLista(ptr2);
-     agregarArchivo(ptr2,archivoEstado);
-        
+        ptr2 = crearLista(ptr2, estadoName.getText(), estadoNumber.getText());
+        mostrarLista(ptr2);
+        agregarArchivo(ptr2, archivoEstado);
+
     }//GEN-LAST:event_estadoSaveActionPerformed
 
     private void tipoSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tipoSaveActionPerformed
         // TODO add your handling code here:
-     ptr3= crearLista(ptr3, tipoName.getText(), tipoNumber.getText());
-     mostrarLista(ptr3);
-     agregarArchivo(ptr3,archivoTipoPeli);
+        ptr3 = crearLista(ptr3, tipoName.getText(), tipoNumber.getText());
+        mostrarLista(ptr3);
+        agregarArchivo(ptr3, archivoTipoPeli);
     }//GEN-LAST:event_tipoSaveActionPerformed
 
     private void insertarImagenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_insertarImagenActionPerformed
         // TODO add your handling code here:
-         FileNameExtensionFilter filtro = new FileNameExtensionFilter("Imagenes", "jpg", "gif", "png");
-         buscar.setFileFilter(filtro);
-          int a = buscar.showOpenDialog(this);
-          if( a== JFileChooser.APPROVE_OPTION){
+        FileNameExtensionFilter filtro = new FileNameExtensionFilter("Imagenes", "jpg", "gif", "png");
+        buscar.setFileFilter(filtro);
+        int a = buscar.showOpenDialog(this);
+        if (a == JFileChooser.APPROVE_OPTION) {
             File archivo = buscar.getSelectedFile();
             String nombre2 = archivo.getName();
             String ruta = archivo.getParent();
-            rutaImagen = ruta+ "\\"+nombre2; 
-          }
+            rutaImagen = ruta + "\\" + nombre2;
+        }
     }//GEN-LAST:event_insertarImagenActionPerformed
 
     private void showInformationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showInformationActionPerformed
@@ -1719,7 +1747,7 @@ public class Administrador extends javax.swing.JFrame {
         String abr = (String) Peliculas.getModel().getValueAt(Peliculas.getSelectedRow(), 3);
         String form = (String) Peliculas.getModel().getValueAt(Peliculas.getSelectedRow(), 4);
         String prov = (String) Peliculas.getModel().getValueAt(Peliculas.getSelectedRow(), 5);
-        String tipop= (String) Peliculas.getModel().getValueAt(Peliculas.getSelectedRow(), 6);
+        String tipop = (String) Peliculas.getModel().getValueAt(Peliculas.getSelectedRow(), 6);
         String est = (String) Peliculas.getModel().getValueAt(Peliculas.getSelectedRow(), 7);
         String dura = (String) Peliculas.getModel().getValueAt(Peliculas.getSelectedRow(), 8);
         String condi = (String) Peliculas.getModel().getValueAt(Peliculas.getSelectedRow(), 9);
@@ -1729,27 +1757,27 @@ public class Administrador extends javax.swing.JFrame {
         nombrePelicula.setText(nom);
         abreviatura.setText(abr);
         formato.setText(form);
-        proovedorNumber.setText(mostrarNumero("archivoProovedor.txt",prov));
+        proovedorNumber.setText(mostrarNumero("archivoProovedor.txt", prov));
         proovedorLabel.setText(prov);
-        tipoPelicula.setText(mostrarNumero("archivoTipoPeli.txt",tipop));
+        tipoPelicula.setText(mostrarNumero("archivoTipoPeli.txt", tipop));
         tipoPeliLabel.setText(tipop);
-        estado.setText(mostrarNumero("archivoEstado.txt",est));
+        estado.setText(mostrarNumero("archivoEstado.txt", est));
         estadoLabel.setText(est);
         duracion.setText(dura);
         condicion.setText(condi);
         ImageIcon imagen1 = new ImageIcon(picture);
-        Icon icono= new ImageIcon(imagen1.getImage().getScaledInstance(foto.getWidth(), foto.getHeight(), Image.SCALE_DEFAULT));
+        Icon icono = new ImageIcon(imagen1.getImage().getScaledInstance(foto.getWidth(), foto.getHeight(), Image.SCALE_DEFAULT));
         foto.setIcon(icono);
     }//GEN-LAST:event_showInformationActionPerformed
 
     private void eliminarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_eliminarButtonActionPerformed
         // TODO add your handling code here:
-         DefaultTableModel model = (DefaultTableModel) Peliculas.getModel();
+        DefaultTableModel model = (DefaultTableModel) Peliculas.getModel();
         int elim = Peliculas.getSelectedRow();
-        if(elim>=0){
+        if (elim >= 0) {
             model.removeRow(elim);
             JOptionPane.showMessageDialog(null, "Eliminacion Exitosa");
-        }else{
+        } else {
             JOptionPane.showMessageDialog(null, "No se pudo eliminar la Pelicula");
         }
     }//GEN-LAST:event_eliminarButtonActionPerformed
@@ -1768,18 +1796,18 @@ public class Administrador extends javax.swing.JFrame {
         getMovie(BoxPelicula.getSelectedItem().toString());
         getDia(BoxHorario.getSelectedItem().toString());
         getHora(BoxHora.getSelectedItem().toString());
-        String sala1= salaBox;
-        String peli1=movieBox;
+        String sala1 = salaBox;
+        String peli1 = movieBox;
         int hora1 = Integer.parseInt(horaBox);
-        String dia1= diaBox;
-      
-       try{
-        ptrSala=insertarPelicula(ptrSala, sala1, dia1, peli1, Integer.parseInt(horaBox));
-        mostrarMultilistaPelicula(ptrSala);
-       }catch(Exception e){
-           System.out.println("Error al guardar la pelicula"+e.getMessage());
-       }
-        
+        String dia1 = diaBox;
+
+        try {
+            ptrSala = insertarPelicula(ptrSala, sala1, dia1, peli1, Integer.parseInt(horaBox));
+            mostrarMultilistaPelicula(ptrSala);
+        } catch (Exception e) {
+            System.out.println("Error al guardar la pelicula" + e.getMessage());
+        }
+
     }//GEN-LAST:event_buttonGestionActionPerformed
 
     private void eliminarFuncionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_eliminarFuncionActionPerformed
@@ -1788,25 +1816,25 @@ public class Administrador extends javax.swing.JFrame {
         getMovie(BoxPelicula.getSelectedItem().toString());
         getDia(BoxHorario.getSelectedItem().toString());
         getHora(BoxHora.getSelectedItem().toString());
-        String sala1= salaBox;
-        String peli1=movieBox;
+        String sala1 = salaBox;
+        String peli1 = movieBox;
         int hora1 = Integer.parseInt(horaBox);
-        String dia1= diaBox;
+        String dia1 = diaBox;
         try {
-             EliminarFuncionPelicula(ptrSala, peli1, sala1, dia1, hora1);
-             mostrarMultilistaPelicula(ptrSala);
+            EliminarFuncionPelicula(ptrSala, peli1, sala1, dia1, hora1);
+            mostrarMultilistaPelicula(ptrSala);
         } catch (Exception e) {
-            System.out.println("Error al eliminar la pelicula"+e.getMessage());
+            System.out.println("Error al eliminar la pelicula" + e.getMessage());
         }
     }//GEN-LAST:event_eliminarFuncionActionPerformed
 
     private void atrasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_atrasActionPerformed
         // TODO add your handling code here:
-           
-            this.setVisible(true);
-            this.setLocationRelativeTo(null);
-            this.setBounds(570, 300, 560, 530);
-            gestionFunciones.setVisible(false);
+
+        this.setVisible(true);
+        this.setLocationRelativeTo(null);
+        this.setBounds(570, 300, 560, 530);
+        gestionFunciones.setVisible(false);
     }//GEN-LAST:event_atrasActionPerformed
 
     /**
