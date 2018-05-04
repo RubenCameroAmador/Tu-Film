@@ -68,8 +68,6 @@ public class LoginUsuario extends javax.swing.JFrame {
         fecha = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         si = new javax.swing.JButton();
-        no = new javax.swing.JButton();
-        jLabel4 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -80,12 +78,12 @@ public class LoginUsuario extends javax.swing.JFrame {
         fecha.setFont(new java.awt.Font("Segoe Print", 3, 24)); // NOI18N
         fecha.setText("Fecha");
 
-        jLabel3.setFont(new java.awt.Font("Segoe Print", 3, 32)); // NOI18N
+        jLabel3.setFont(new java.awt.Font("Segoe Print", 3, 36)); // NOI18N
         jLabel3.setText("¡BIENVENIDOS!");
 
         si.setFont(new java.awt.Font("Segoe Print", 3, 20)); // NOI18N
-        si.setIcon(new javax.swing.ImageIcon(getClass().getResource("/tu/film/imagenes/si_.jpg"))); // NOI18N
-        si.setText("SI");
+        si.setIcon(new javax.swing.ImageIcon(getClass().getResource("/tu/film/imagenes/adminLogin.jpg"))); // NOI18N
+        si.setText("Acceder");
         si.setBorder(null);
         si.setBorderPainted(false);
         si.setContentAreaFilled(false);
@@ -99,26 +97,6 @@ public class LoginUsuario extends javax.swing.JFrame {
                 siActionPerformed(evt);
             }
         });
-
-        no.setFont(new java.awt.Font("Segoe Print", 3, 20)); // NOI18N
-        no.setIcon(new javax.swing.ImageIcon(getClass().getResource("/tu/film/imagenes/no_.jpg"))); // NOI18N
-        no.setText("NO");
-        no.setBorder(null);
-        no.setBorderPainted(false);
-        no.setContentAreaFilled(false);
-        no.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        no.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        no.setIconTextGap(-3);
-        no.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
-        no.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        no.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                noActionPerformed(evt);
-            }
-        });
-
-        jLabel4.setFont(new java.awt.Font("Segoe Print", 3, 27)); // NOI18N
-        jLabel4.setText("¿Tiene o desea obtener una cuenta en Tu-Film?");
 
         jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/tu/film/imagenes/flecha_ant_.gif"))); // NOI18N
         jButton1.setBorder(null);
@@ -139,31 +117,24 @@ public class LoginUsuario extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 15, Short.MAX_VALUE)
-                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 665, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(178, 178, 178)
-                        .addComponent(si)
-                        .addGap(94, 94, 94)
-                        .addComponent(no, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
-            .addGroup(layout.createSequentialGroup()
-                .addGap(202, 202, 202)
-                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addComponent(jButton1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 134, Short.MAX_VALUE)
+                .addComponent(hora, javax.swing.GroupLayout.PREFERRED_SIZE, 235, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(131, 131, 131))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(fecha, javax.swing.GroupLayout.PREFERRED_SIZE, 235, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(149, 149, 149))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(97, 97, 97)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 326, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButton1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(hora, javax.swing.GroupLayout.PREFERRED_SIZE, 235, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(fecha, javax.swing.GroupLayout.PREFERRED_SIZE, 235, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(214, 214, 214))
+                        .addGap(84, 84, 84)
+                        .addComponent(si)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -174,15 +145,11 @@ public class LoginUsuario extends javax.swing.JFrame {
                     .addComponent(jButton1))
                 .addGap(18, 18, 18)
                 .addComponent(fecha)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 22, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 42, Short.MAX_VALUE)
                 .addComponent(jLabel3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel4)
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(no, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(si, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(22, 22, 22))
+                .addGap(40, 40, 40)
+                .addComponent(si)
+                .addContainerGap())
         );
 
         pack();
@@ -196,16 +163,6 @@ public class LoginUsuario extends javax.swing.JFrame {
         this.setVisible(false);
         
     }//GEN-LAST:event_siActionPerformed
-
-    private void noActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_noActionPerformed
-        // TODO add your handling code here:
-        Usuario u = new Usuario(ptr);
-         abierta=true;
-        u.setVisible(true);
-        abierta=true;
-        
-        
-    }//GEN-LAST:event_noActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
@@ -255,8 +212,6 @@ public class LoginUsuario extends javax.swing.JFrame {
     private javax.swing.JLabel hora;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JButton no;
     private javax.swing.JButton si;
     // End of variables declaration//GEN-END:variables
 }

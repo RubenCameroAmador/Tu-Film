@@ -229,10 +229,12 @@ public class Entrada extends javax.swing.JFrame {
            LoginUsuario l= new LoginUsuario(a.getPtrSala());
         l.setVisible(true);
         l.setLocationRelativeTo(null);
-        l.setBounds(570, 280, 710, 490);
+        l.setBounds(570, 280, 574, 206);
        this.setVisible(false);
         } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Necesita gestionar una Funcion para ingresar");
             System.out.println("No hay peliculas agregadas "+e.getMessage());
+            
         }
         
     }//GEN-LAST:event_usuarioActionPerformed
