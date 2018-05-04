@@ -11,6 +11,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.util.ArrayList;
 import javax.swing.DefaultListModel;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -32,6 +33,7 @@ public class Usuario extends javax.swing.JFrame {
     reservaPeli ptrPeli;
     String nombrePeliculaGeneral = ",";
     String fotoPeliculaGeneral = ",";
+    ArrayList<String>referencias;
     /**
      * Creates new form Usuario
      */
@@ -48,8 +50,9 @@ public class Usuario extends javax.swing.JFrame {
         mostrarPelicula.setModel(model);
         list.setModel(model);
         horarioList.setModel(model);
+        peliculaReference.setModel(model);
         //escribir();
-
+        referencias= new ArrayList();
         ///reserva
         ptrPeli = null;
         /*try {
@@ -195,21 +198,29 @@ public class Usuario extends javax.swing.JFrame {
     }
 
     reservaPeli insetarSilla(reservaPeli ptr, String nombrePelicula, String dia, int hora, String referencia) {
+        System.out.println("Entro a insertar silla");
         reservaPeli p = ptr;
         boolean entro = false;
         while (p != null && entro == false) {
+            System.out.println("Entro al while de insertar silla");
             if (p.nombrePelicula.equalsIgnoreCase(nombrePelicula) &&  p.dia.equalsIgnoreCase(dia) && p.hora == hora) {
+                System.out.println("Encontró la pelicula");
                 entro = true;
             } else {
+                System.out.println("Esta Buscando la pelicula");
                 p = p.link;
             }
         }
+        System.out.println("Salio del While");
+        System.out.println(p.nombrePelicula);
         silla q = p.linksi;
         silla r = new silla();
         r.referencia = referencia;
-        if (q != null) {
+        if (q == null) {
+            System.out.println("Entro unica vez");
             p.linksi = r;
         } else {
+            
             while(q.linkSilla!=null){
                 q=q.linkSilla;
             }
@@ -329,14 +340,23 @@ public class Usuario extends javax.swing.JFrame {
         hora = new javax.swing.JTextField();
         jLabel18 = new javax.swing.JLabel();
         jLabel19 = new javax.swing.JLabel();
+        fotoPelicula = new javax.swing.JLabel();
         referenciaAsiento = new javax.swing.JTextField();
+        jLabel20 = new javax.swing.JLabel();
+        comprarButton = new javax.swing.JButton();
         reservaLogin = new javax.swing.JFrame();
         jLabel13 = new javax.swing.JLabel();
         nombreUsuario = new javax.swing.JTextField();
         jLabel14 = new javax.swing.JLabel();
         contraseñaUsuario = new javax.swing.JPasswordField();
         reservaButton = new javax.swing.JButton();
-        fotoPelicula = new javax.swing.JLabel();
+        comprarReserva = new javax.swing.JFrame();
+        peliculaName = new javax.swing.JLabel();
+        peliculaDay = new javax.swing.JLabel();
+        peliculaHour = new javax.swing.JLabel();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        peliculaReference = new javax.swing.JList<>();
+        jLabel21 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
@@ -770,7 +790,7 @@ public class Usuario extends javax.swing.JFrame {
             }
         });
 
-        reservarButton.setText("Reservar Pelicula");
+        reservarButton.setText("Reservar Asiento");
         reservarButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 reservarButtonActionPerformed(evt);
@@ -786,7 +806,7 @@ public class Usuario extends javax.swing.JFrame {
         });
         horarios.setViewportView(horarioList);
 
-        jLabel15.setText("Al iniciar una Click en Extraer Lista");
+        jLabel15.setText("Al iniciar unda Click en Extraer Lista");
 
         jLabel16.setText("Seleccione el dia de la reserva: ");
 
@@ -796,6 +816,21 @@ public class Usuario extends javax.swing.JFrame {
 
         jLabel19.setText("Digite la referencia del asiento");
 
+        referenciaAsiento.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                referenciaAsientoActionPerformed(evt);
+            }
+        });
+
+        jLabel20.setText("Funciones: ");
+
+        comprarButton.setText("Comprar Asiento");
+        comprarButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comprarButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout ReservaLayout = new javax.swing.GroupLayout(Reserva.getContentPane());
         Reserva.getContentPane().setLayout(ReservaLayout);
         ReservaLayout.setHorizontalGroup(
@@ -803,33 +838,38 @@ public class Usuario extends javax.swing.JFrame {
             .addGroup(ReservaLayout.createSequentialGroup()
                 .addGroup(ReservaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(ReservaLayout.createSequentialGroup()
-                        .addGap(19, 19, 19)
-                        .addGroup(ReservaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(nombrePelicula, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(ReservaLayout.createSequentialGroup()
-                                .addGap(171, 171, 171)
-                                .addGroup(ReservaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jLabel18)
-                                    .addComponent(jLabel17, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(horarios)
-                                    .addComponent(jLabel16, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(dia)
-                                    .addComponent(hora)
-                                    .addGroup(ReservaLayout.createSequentialGroup()
-                                        .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(referenciaAsiento))))
-                            .addGroup(ReservaLayout.createSequentialGroup()
-                                .addGap(19, 19, 19)
-                                .addComponent(listaReserva, javax.swing.GroupLayout.PREFERRED_SIZE, 404, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGap(38, 38, 38)
+                        .addComponent(listaReserva, javax.swing.GroupLayout.PREFERRED_SIZE, 404, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(ReservaLayout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(extraerLista)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jLabel15))
                     .addGroup(ReservaLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(reservarButton)))
+                        .addGroup(ReservaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(ReservaLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .addGroup(ReservaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(nombrePelicula, javax.swing.GroupLayout.DEFAULT_SIZE, 162, Short.MAX_VALUE)
+                                    .addComponent(fotoPelicula, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addGroup(ReservaLayout.createSequentialGroup()
+                                .addGap(19, 19, 19)
+                                .addGroup(ReservaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(reservarButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(comprarButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addGap(18, 18, 18)
+                        .addGroup(ReservaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel18)
+                            .addComponent(jLabel17, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(horarios)
+                            .addComponent(jLabel16, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(dia)
+                            .addComponent(hora)
+                            .addGroup(ReservaLayout.createSequentialGroup()
+                                .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(referenciaAsiento))
+                            .addComponent(jLabel20))))
                 .addContainerGap(75, Short.MAX_VALUE))
         );
         ReservaLayout.setVerticalGroup(
@@ -842,29 +882,35 @@ public class Usuario extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(listaReserva, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(nombrePelicula, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(11, 11, 11)
-                .addComponent(horarios, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(30, 30, 30)
-                .addComponent(jLabel16)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(dia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(ReservaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(nombrePelicula, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel20))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel17)
-                .addGap(9, 9, 9)
+                .addGroup(ReservaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(ReservaLayout.createSequentialGroup()
+                        .addComponent(horarios, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(30, 30, 30)
+                        .addComponent(jLabel16)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(dia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabel17))
+                    .addComponent(fotoPelicula, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(hora, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(ReservaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, ReservaLayout.createSequentialGroup()
-                        .addComponent(reservarButton)
-                        .addGap(28, 28, 28))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, ReservaLayout.createSequentialGroup()
-                        .addGroup(ReservaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel19)
-                            .addComponent(referenciaAsiento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabel18)
-                        .addGap(19, 19, 19))))
+                .addGroup(ReservaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel19)
+                    .addComponent(referenciaAsiento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel18)
+                .addGap(19, 19, 19))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, ReservaLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(reservarButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(comprarButton)
+                .addGap(23, 23, 23))
         );
 
         jLabel13.setText("Digite su nombre de Usuario");
@@ -912,6 +958,51 @@ public class Usuario extends javax.swing.JFrame {
                 .addGap(27, 27, 27)
                 .addComponent(reservaButton)
                 .addContainerGap(85, Short.MAX_VALUE))
+        );
+
+        peliculaName.setText("peliculaName");
+
+        peliculaDay.setText("peliculaDay");
+
+        peliculaHour.setText("PeliculaHour");
+
+        peliculaReference.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        jScrollPane4.setViewportView(peliculaReference);
+
+        jLabel21.setText("Referencia Asientos");
+
+        javax.swing.GroupLayout comprarReservaLayout = new javax.swing.GroupLayout(comprarReserva.getContentPane());
+        comprarReserva.getContentPane().setLayout(comprarReservaLayout);
+        comprarReservaLayout.setHorizontalGroup(
+            comprarReservaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(comprarReservaLayout.createSequentialGroup()
+                .addGap(51, 51, 51)
+                .addGroup(comprarReservaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel21)
+                    .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(peliculaHour)
+                    .addComponent(peliculaDay)
+                    .addComponent(peliculaName))
+                .addContainerGap(237, Short.MAX_VALUE))
+        );
+        comprarReservaLayout.setVerticalGroup(
+            comprarReservaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(comprarReservaLayout.createSequentialGroup()
+                .addGap(32, 32, 32)
+                .addComponent(peliculaName)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(peliculaDay)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(peliculaHour)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel21)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(56, Short.MAX_VALUE))
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -1293,7 +1384,10 @@ public class Usuario extends javax.swing.JFrame {
         Icon icono = new ImageIcon(imagen1.getImage().getScaledInstance(fotoPelicula.getWidth(), fotoPelicula.getHeight(), Image.SCALE_DEFAULT));
         fotoPelicula.setIcon(icono);
         nombrePelicula.setText(nombrePeliculaGeneral);
+        System.out.println("nombrePeliculaGeneral");
+        System.out.println("fotoPeliculaGeneral");
         buscarInformacionPelicula(ptrSala, nombrePeliculaGeneral);
+        referencias.clear();
     }//GEN-LAST:event_extraerListaActionPerformed
 
     private void reservarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reservarButtonActionPerformed
@@ -1301,11 +1395,31 @@ public class Usuario extends javax.swing.JFrame {
         try {
         ptrPeli =  insetarSilla(ptrPeli, nombrePeliculaGeneral, dia.getText() , Integer.parseInt(hora.getText()) ,referenciaAsiento.getText());
         mostrarMultilistaCompleta(ptrPeli);
+        referencias.add(referenciaAsiento.getText());
         } catch (Exception e) {
         System.out.println("Error al guardar las sillas "+e.getMessage());
         }
         
     }//GEN-LAST:event_reservarButtonActionPerformed
+
+    private void referenciaAsientoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_referenciaAsientoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_referenciaAsientoActionPerformed
+
+    private void comprarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comprarButtonActionPerformed
+        // TODO add your handling code here:
+        comprarReserva.setVisible(true);
+        peliculaName.setText(nombrePeliculaGeneral);
+        peliculaDay.setText(dia.getText());
+        peliculaHour.setText(hora.getText());
+        int tamañaReferencias = referencias.size();
+        DefaultListModel model = (DefaultListModel) list.getModel();
+        model.clear();
+        for (String referencia : referencias) {
+            model.addElement(referencia);
+        }
+        
+    }//GEN-LAST:event_comprarButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1350,6 +1464,8 @@ public class Usuario extends javax.swing.JFrame {
     private javax.swing.JFrame Reserva;
     private javax.swing.JButton atras;
     private javax.swing.JTextField codigo;
+    private javax.swing.JButton comprarButton;
+    private javax.swing.JFrame comprarReserva;
     private javax.swing.JPasswordField contraseña;
     private javax.swing.JPasswordField contraseñaUsuario;
     private javax.swing.JTextField dia;
@@ -1382,6 +1498,8 @@ public class Usuario extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel20;
+    private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -1396,6 +1514,7 @@ public class Usuario extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JList<String> list;
     private javax.swing.JScrollPane listaReserva;
     private javax.swing.JList<String> mostrarPelicula;
@@ -1406,6 +1525,10 @@ public class Usuario extends javax.swing.JFrame {
     private javax.swing.JLabel nombrePelicula;
     private javax.swing.JTextField nombreUsuario;
     private javax.swing.JPasswordField password;
+    private javax.swing.JLabel peliculaDay;
+    private javax.swing.JLabel peliculaHour;
+    private javax.swing.JLabel peliculaName;
+    private javax.swing.JList<String> peliculaReference;
     private javax.swing.JTextField referenciaAsiento;
     private javax.swing.JTable registro;
     private javax.swing.JFrame registroFrame;
