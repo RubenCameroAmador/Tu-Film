@@ -1,5 +1,3 @@
-6979,5847,Harry Potter y la Piedra Filosofal,Harry Potter,2D,Columbia,Terror,ejemplo1,2:30,buena,C:\Users\Ruben Camero\Pictures\HarryPotter.jpg
+﻿6979,5847,Harry Potter y la Piedra Filosofal,Harry Potter,2D,Columbia,Terror,ejemplo1,2:30,buena,C:\Users\Ruben Camero\Pictures\HarryPotter.jpg
 897875,875875,COCO,coco,HD,jjjjj,comedia,activo,2:30,3452,C:\Users\Ruben Camero\Pictures\cocoMovie.jpg
-6979,5847,Harry Potter y la Piedra Filosofal,Harry Potter,2D,Columbia,Terror,ejemplo1,2:30,buena,C:\Users\Ruben Camero\Pictures\HarryPotter.jpg
-897875,875875,COCO,coco,HD,jjjjj,comedia,activo,2:30,3452,C:\Users\Ruben Camero\Pictures\cocoMovie.jpg
-5677,09887,Chucky el muñeco diabolico ,Child´s Play,2D,DarkHouse,Terror,activo,2:30,Aceptable,C:\Users\Adriana Arango\Pictures\child´s play.jpg
+4534,534534,Verdad O Reto,verdadoreto,2D,DarkHouse,Terror,activo,1:35,BUENA,C:\Users\Ruben Camero\Pictures\verdadOReto.jpg
